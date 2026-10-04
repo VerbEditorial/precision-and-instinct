@@ -3175,6 +3175,26 @@
     grid.appendChild(el);
   });
 
+  /* "Latest case file": the newest released episode that has a case file (episodes 1-12 fall back to the markup above) */
+  (function () {
+    var FEATURE = {
+      '13': { img: 'img/13-the-mad-gasser-of-mattoon/opening.jpg', alt: 'Illustration: a balled-up cloth, a skeleton key and a lipstick tube on weathered porch boards at night', place: 'Mattoon, Illinois &middot; 1944', blurb: 'A small Illinois town reported a mysterious gas attacker in September 1944. Nobody was ever arrested, and one porch left physical evidence behind.' },
+      '14': { img: 'img/14-the-hall-mills-murders/opening-poster.jpg', alt: 'The crab apple tree on De Russey\u2019s Lane, New Jersey', place: 'New Jersey &middot; 1922', blurb: 'Two bodies under a crab apple tree. A family tried and acquitted. After a century the case is short of evidence anyone can trust.' }
+    };
+    var newest = null;
+    Object.keys(CASEFILES).sort().forEach(function (n) { var r = eps[parseInt(n, 10) - 1][4]; if ((!r || r <= today) && FEATURE[n]) newest = n; });
+    if (!newest) return;
+    var f = FEATURE[newest], ep = eps[parseInt(newest, 10) - 1], a = document.querySelector('a.featured');
+    if (!a) return;
+    a.href = CASEFILES[newest];
+    a.querySelector('.print').removeAttribute('style');
+    var im = a.querySelector('img'); im.src = f.img; im.alt = f.alt;
+    a.querySelector('.tag-recon').innerHTML = f.place;
+    a.querySelector('h3').textContent = ep[0];
+    a.querySelector('.body p').textContent = f.blurb;
+    var c = document.querySelector('#latest + .count'); if (c) c.innerHTML = 'Episode ' + newest + ' &middot; Updated each Sunday';
+  })();
+
   /* "Next case" teaser: the next episode still waiting for its release date */
   var upcoming = eps.map(function (e, i) { return { e: e, n: String(i + 1).padStart(2, '0') }; })
     .filter(function (x) { return x.e[4] && x.e[4] > today; })
