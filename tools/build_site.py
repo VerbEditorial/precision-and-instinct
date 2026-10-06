@@ -259,7 +259,7 @@ def build_page(num, eps, hashes, blocks, cfg, urls, released_nums, preview, conf
 
 # ───────────────────────── site-wide pieces ─────────────────────────
 COPYRIGHT = "\u00a9 2026 Verb Editorial LLC. All rights reserved."
-DISCLOSURE = "The hosts' voices in these episodes are AI-generated. All research, writing, and production are done by a human team."
+DISCLOSURE = "The hosts are characters created by Verb Editorial. Their voices are AI-generated. All research, writing and production are done by a human team."
 ADDRESS_PLACEHOLDER = "[MAILING ADDRESS GOES HERE. Placeholder until the mail receiving address is chosen.]"
 TAPLINK_RE = re.compile(r'<a\b([^>]*?)href="(https://(?:precisionandinstinct\.taplink\.bio|rss\.com/podcasts/precision-instinct/[^"]*))"([^>]*)>')
 

@@ -90,7 +90,7 @@ The Sunday-email box is built from `tools/site-config.json`:
 
 ## AI-voice disclosure
 
-Every page's footer carries: "The hosts' voices in these episodes are AI-generated. All research, writing, and production are done by a human team." (set in `tools/build_site.py`).
+Every page's footer carries: "The hosts are characters created by Verb Editorial. Their voices are AI-generated. All research, writing and production are done by a human team." (set in `tools/build_site.py`).
 
 ## Building the pages
 
