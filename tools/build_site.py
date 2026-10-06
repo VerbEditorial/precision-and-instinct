@@ -195,7 +195,7 @@ def build_page(num, eps, hashes, blocks, cfg, urls, released_nums, preview, conf
     form, address = signup_html(conf, preview)
     block = block[:i] + "".join(nav) + "\n    " + (form + "\n    " if form else "") + block[i:]
     # footer: the AI-voice disclosure (verbatim), then the mailing address when the signup box is present
-    block, k = re.subn(r'(<footer style="text-align:left">.*?<p class="small">.*?</p>)', lambda m: m.group(1) + '\n      <p class="disclosure">%s</p>' % html.escape(DISCLOSURE, quote=False) + (("\n      " + address) if address else ""), block, count=1, flags=re.S)
+    block, k = re.subn(r'(<footer style="text-align:left">.*?<p class="small">.*?</p>)', lambda m: m.group(1) + '\n      <p class="disclosure">%s</p>' % html.escape(DISCLOSURE, quote=False) + '\n      <p class="disclosure copyright">%s</p>' % html.escape(COPYRIGHT, quote=False) + (("\n      " + address) if address else ""), block, count=1, flags=re.S)
     if k != 1:
         die("footer not found in case %s" % num)
     block = decorate_links(block, slug, "page")
@@ -258,6 +258,7 @@ def build_page(num, eps, hashes, blocks, cfg, urls, released_nums, preview, conf
 
 
 # ───────────────────────── site-wide pieces ─────────────────────────
+COPYRIGHT = "\u00a9 2026 Verb Editorial LLC. All rights reserved."
 DISCLOSURE = "The hosts' voices in these episodes are AI-generated. All research, writing, and production are done by a human team."
 ADDRESS_PLACEHOLDER = "[MAILING ADDRESS GOES HERE. Placeholder until the mail receiving address is chosen.]"
 TAPLINK_RE = re.compile(r'<a\b([^>]*?)href="(https://(?:precisionandinstinct\.taplink\.bio|rss\.com/podcasts/precision-instinct/[^"]*))"([^>]*)>')
@@ -429,7 +430,7 @@ def build_home(src, eps, hashes, cfg, released, conf, preview):
     if k != 1:
         die("home: empty case grid not found in site-source.html")
     form, address = signup_html(conf, preview)
-    footer_extra = '\n      <p class="disclosure">%s</p>' % html.escape(DISCLOSURE, quote=False)
+    footer_extra = '\n      <p class="disclosure">%s</p>\n      <p class="disclosure copyright">%s</p>' % (html.escape(DISCLOSURE, quote=False), html.escape(COPYRIGHT, quote=False))
     # signup sits just above the footer; disclosure and address go inside it
     foot = re.search(r"<footer>\s*(<p class=\"show-line\">.*?</p>)", home_block, re.S)
     if not foot:
