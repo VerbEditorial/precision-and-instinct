@@ -126,7 +126,7 @@ var PI_BASE = (typeof window.PI_BASE === 'string') ? window.PI_BASE : '/';
       var n = ac.createBufferSource(); n.buffer = b; n._k = k; n.connect(g); n.start();
       themeNode = n; themeG = g;
       sound.hidden = false; sound.classList.add('playing');
-      n.onended = function () { if (themeNode === n) { themeNode = null; if (onCase && !cbNode) { sound.classList.remove('playing'); sound.hidden = true; } } };
+      n.onended = function () { if (themeNode === n) { themeNode = null; if (onCase && !cbNode) { sound.classList.remove('playing'); sound.hidden = !!outroDone;   /* stays visible so sound can be switched back on; gone only after the closing theme */ } } };
       if (k === 'intro') { clearTimeout(cbTimer); cbTimer = setTimeout(function () { caseBedStart(); }, Math.max(0, b.duration - 2.5) * 1000); }
     }).catch(function () {});
   }
@@ -135,7 +135,7 @@ var PI_BASE = (typeof window.PI_BASE === 'string') ? window.PI_BASE : '/';
     var n = themeNode, g = themeG, t = ac.currentTime; themeNode = null;
     g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(g.gain.value, t); g.gain.linearRampToValueAtTime(0, t + secs);
     setTimeout(function () { try { n.stop(); } catch (e) {} }, secs * 1000 + 100);
-    if (onCase && !cbNode) { sound.classList.remove('playing'); sound.hidden = true; }
+    if (onCase && !cbNode) { sound.classList.remove('playing'); sound.hidden = !!outroDone;   /* stays visible so sound can be switched back on; gone only after the closing theme */ }
   }
   /* case bed: loops under the reading, from the tail of the intro until the outro takes over */
   /* the file carries 1 s of the loop's own tail before it and head after it; looping between those fixed points
@@ -169,7 +169,7 @@ var PI_BASE = (typeof window.PI_BASE === 'string') ? window.PI_BASE : '/';
     if (!cbNode) return;
     var n = cbNode; caseBedLevel(0, secs); cbNode = null; cbG = null;
     setTimeout(function () { try { n.stop(); } catch (e) {} }, secs * 1000 + 100);
-    if (onCase && !themeNode) { sound.classList.remove('playing'); sound.hidden = true; }
+    if (onCase && !themeNode) { sound.classList.remove('playing'); sound.hidden = !!outroDone;   /* stays visible so sound can be switched back on; gone only after the closing theme */ }
   }
   /* a clip takes the floor: the bed dips out, then comes back once no clip is playing */
   document.querySelectorAll('[data-clip] audio').forEach(function (au) {
@@ -205,7 +205,9 @@ var PI_BASE = (typeof window.PI_BASE === 'string') ? window.PI_BASE : '/';
   if (window.MutationObserver) new MutationObserver(function () { setUI(); }).observe(sound, { attributes: true, attributeFilter: ['class'] });
   function remember() { try { localStorage.setItem('pi-sound', wanted ? 'on' : 'off'); } catch (e) {} }
   sbtn.addEventListener('click', function () {
-    if (onCase) { wanted = !wanted; setUI(); remember(); if (!wanted) { stopTheme(0.6); caseBedStop(0.6); } else if (!outroDone) caseBedStart(); return; }
+    if (onCase) {
+      if (wanted && !themeNode && !cbNode && !clipPlaying()) { if (ac) ac.resume(); if (!outroDone) { if (window.scrollY < window.innerHeight * 1.5) playTheme('intro'); else caseBedStart(); } setUI(); return; }   /* waiting for a click: this click is it */
+      wanted = !wanted; setUI(); remember(); if (!wanted) { stopTheme(0.6); caseBedStop(0.6); } else if (!outroDone) caseBedStart(); return; }
     if (wanted && !srcNode) { play(); return; }          /* on, but not started yet: start it */
     wanted = !wanted; setUI(); remember();
     if (wanted) play(); else fadeOut();
@@ -213,6 +215,7 @@ var PI_BASE = (typeof window.PI_BASE === 'string') ? window.PI_BASE : '/';
   function firstGesture(e) {
     document.removeEventListener('pointerdown', firstGesture, true);
     document.removeEventListener('keydown', firstGesture, true);
+    try { sessionStorage.setItem('pi-gesture', '1'); } catch (x) {}
     if (sbtn.contains(e.target)) return;                 /* the button handles its own click */
     if (!wanted) return;
     if (!onCase) { play(); return; }
@@ -226,6 +229,7 @@ var PI_BASE = (typeof window.PI_BASE === 'string') ? window.PI_BASE : '/';
   function autoStart() {
     var same = false;
     try { same = !!document.referrer && new URL(document.referrer).origin === location.origin; } catch (e) {}
+    try { if (sessionStorage.getItem('pi-gesture') === '1') same = true; } catch (e) {}
     if (!wanted || !same || !getAudio()) return;
     var go = function () { if (ac.state === 'running' && onCase && window.scrollY < window.innerHeight * 1.5) playTheme('intro'); };
     try { var r = ac.resume(); if (r && r.then) r.then(go).catch(function () {}); else go(); } catch (e) {}
@@ -233,7 +237,7 @@ var PI_BASE = (typeof window.PI_BASE === 'string') ? window.PI_BASE : '/';
   function bedForView(isCase) {
     onCase = isCase;
     caseBedStop(0.8);
-    if (isCase) { outroDone = false; fadeOut(); stopTheme(0.6); sound.hidden = true; if (wanted && ac) playTheme('intro'); else autoStart(); }
+    if (isCase) { outroDone = false; fadeOut(); stopTheme(0.6); sound.hidden = false; if (wanted && ac) playTheme('intro'); else autoStart(); }
     else { stopTheme(0.8); sound.hidden = false; if (wanted && ac) play(); }
   }
   setUI();
