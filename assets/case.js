@@ -333,6 +333,13 @@ var PI_BASE = (typeof window.PI_BASE === 'string') ? window.PI_BASE : '/';
   }
   setUI();
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  /* ScrollTrigger puts scrollRestoration back to 'auto' after each refresh: pin it to manual, and start every page at the top (unless it was opened at an anchor) */
+  if (window.ScrollTrigger && ScrollTrigger.clearScrollMemory) ScrollTrigger.clearScrollMemory('manual');
+  (function () {
+    if (location.hash) return;
+    var goTop = function () { window.scrollTo(0, 0); if (window.self !== window.top) { try { document.documentElement.scrollIntoView(); } catch (e) {} } };
+    goTop(); requestAnimationFrame(goTop); setTimeout(goTop, 80);
+  })();
   show();
 })();
 

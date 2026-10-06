@@ -628,6 +628,7 @@ def build_privacy(conf, preview):
     <p class="show-line">Precision &amp; Instinct with Simone Valdez and Eli Marchetti</p>{footer_lines(prefix, preview)}
   </footer>
 </div>
+<script>(function(){{var t=function(){{window.scrollTo(0,0);if(window.self!==window.top){{try{{document.documentElement.scrollIntoView();}}catch(e){{}}}}}};t();setTimeout(t,80);}})();</script>
 </body>
 </html>
 """
