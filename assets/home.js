@@ -222,10 +222,18 @@ var PI_BASE = (typeof window.PI_BASE === 'string') ? window.PI_BASE : '/';
   }
   document.addEventListener('pointerdown', firstGesture, true);
   document.addEventListener('keydown', firstGesture, true);
+  /* Each case is its own page now. A visitor who clicked through from the home page (same site) has already turned sound on, so the browser lets the music start by itself; if it refuses, nothing plays until the first click, as before. */
+  function autoStart() {
+    var same = false;
+    try { same = !!document.referrer && new URL(document.referrer).origin === location.origin; } catch (e) {}
+    if (!wanted || !same || !getAudio()) return;
+    var go = function () { if (ac.state === 'running' && onCase && window.scrollY < window.innerHeight * 1.5) playTheme('intro'); };
+    try { var r = ac.resume(); if (r && r.then) r.then(go).catch(function () {}); else go(); } catch (e) {}
+  }
   function bedForView(isCase) {
     onCase = isCase;
     caseBedStop(0.8);
-    if (isCase) { outroDone = false; fadeOut(); stopTheme(0.6); sound.hidden = true; if (wanted && ac) playTheme('intro'); }
+    if (isCase) { outroDone = false; fadeOut(); stopTheme(0.6); sound.hidden = true; if (wanted && ac) playTheme('intro'); else autoStart(); }
     else { stopTheme(0.8); sound.hidden = false; if (wanted && ac) play(); }
   }
   setUI();
