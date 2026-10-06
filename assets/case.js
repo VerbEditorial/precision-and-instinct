@@ -150,7 +150,7 @@ var PI_BASE = (typeof window.PI_BASE === 'string') ? window.PI_BASE : '/';
         fig.classList.add('playing'); st.textContent = 'Playing';
       } else { a.pause(); fig.classList.remove('playing'); st.textContent = 'Paused'; }
     });
-    fetch(a.getAttribute('src'), { method: 'HEAD' }).then(function (r) { if (!r.ok) off('Clip coming'); }).catch(function () { off('Clip coming'); });
+    fetch(a.getAttribute('src'), { method: 'HEAD' }).then(function (r) { if (r.status === 404) off('Clip coming'); }).catch(function () {});  /* only a real 404 marks a clip missing; a host that refuses HEAD requests must not disable working clips */
   });
 
   /* ——— music bed: on by default; browsers only allow sound after the visitor's first click, tap or key press ——— */
