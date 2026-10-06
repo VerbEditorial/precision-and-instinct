@@ -45,17 +45,16 @@ for f in built:
 # 3. signup and address
 conf = json.loads(read("tools/site-config.json"))
 su = conf["signup"]
-addr = conf.get("mailing_address", "").strip()
 if su.get("live"):
     if not (su.get("mailerlite_account_id") and su.get("mailerlite_form_id")):
         problems.append("signup is live but the MailerLite ids are empty")
 else:
     notes.append("signup is NOT live (the form is left out of the live site until MailerLite is set up)")
 
-# the mailing address is needed in the email footer only (never on the website, not for the signup form)
+# the mailing address lives ONLY in the email template footer (never on the website)
 tmpl = read("tools/email/sunday-email.html")
-if "MAILING ADDRESS GOES HERE" in tmpl or not addr:
-    msg = "the email template still has the placeholder address and mailing_address is empty: do NOT send an email yet"
+if "MAILING ADDRESS GOES HERE" in tmpl:
+    msg = "the email template still has the placeholder mailing address: do NOT send an email yet"
     if "--send" in sys.argv:
         problems.append(msg)
     else:

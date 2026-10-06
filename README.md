@@ -82,10 +82,10 @@ Create the site in Plausible and add these three custom-event goals by name. Lin
 
 The Sunday-email box is built from `tools/site-config.json`:
 
-- `signup.live` (false until MailerLite is ready), `signup.mailerlite_account_id`, `signup.mailerlite_form_id`, `mailing_address`.
+- `signup.live` (false until MailerLite is ready), `signup.mailerlite_account_id`, `signup.mailerlite_form_id`.
 - While `live` is false, the box is **left out of the live site**. Preview builds show it with a "PREVIEW ONLY" note.
 - The build refuses `live: true` without both MailerLite ids. The form does **not** need the mailing address.
-- The mailing address belongs **only in the email footer** (CAN-SPAM covers emails, not the website). The website never shows an address, and `golive_check.py` fails if a page does. Until the real address is pasted into `tools/email/sunday-email.html` and `mailing_address` is set, `python3 tools/golive_check.py --send` fails: do not send any email before that.
+- The mailing address belongs **only in the email footer** (CAN-SPAM covers emails, not the website): it is written into `tools/email/sunday-email.html`. The website never shows an address, and `golive_check.py` fails if a page does. `python3 tools/golive_check.py --send` fails while the template still has the placeholder.
 - Before the first email, add MailerLite's SPF, DKIM and DMARC records in GoDaddy DNS (never change the website records). A domain can have only one SPF record: merge MailerLite's entry into the existing ImprovMX one, do not add a second.
 
 ## Privacy page
