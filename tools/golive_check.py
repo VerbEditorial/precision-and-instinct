@@ -32,11 +32,11 @@ for n in cases:
         problems.append("tools/cases.json has an entry for unreleased episode %s" % n)
 
 # 2. built files carry no preview-only pieces
-built = [ROOT / "index.html"] + sorted((ROOT / "cases").glob("*/index.html"))
+built = [ROOT / "index.html", ROOT / "privacy" / "index.html"] + sorted((ROOT / "cases").glob("*/index.html"))
 for f in built:
     t = f.read_text(encoding="utf-8")
     for bad, why in (("MAILING ADDRESS GOES HERE", "placeholder mailing address"), ("PREVIEW ONLY", "preview-only note"),
-                     ("noindex", "a noindex tag"), ("review=pi2026", "the old review switch")):
+                     ("mail-address", "a mailing-address line (the website never shows one)"), ("noindex", "a noindex tag"), ("review=pi2026", "the old review switch")):
         if bad in t:
             problems.append("%s contains %s" % (f.relative_to(ROOT), why))
     if "data-domain" not in t:
@@ -52,7 +52,7 @@ if su.get("live"):
 else:
     notes.append("signup is NOT live (the form is left out of the live site until MailerLite is set up)")
 
-# the mailing address is needed for the email and the footer line, not for the signup form
+# the mailing address is needed in the email footer only (never on the website, not for the signup form)
 tmpl = read("tools/email/sunday-email.html")
 if "MAILING ADDRESS GOES HERE" in tmpl or not addr:
     msg = "the email template still has the placeholder address and mailing_address is empty: do NOT send an email yet"
@@ -60,12 +60,10 @@ if "MAILING ADDRESS GOES HERE" in tmpl or not addr:
         problems.append(msg)
     else:
         notes.append(msg + " (the signup form itself does not need it)")
-if not addr:
-    notes.append("the live footer shows no address line until mailing_address is set")
 
 # 4. sitemap
 sm = read("sitemap.xml")
-want = len(cases) + 1
+want = len(cases) + 2   # home + every case + /privacy/
 if sm.count("<loc>") != want:
     problems.append("sitemap.xml has %d URLs, expected %d (rebuild with tools/build_site.py)" % (sm.count("<loc>"), want))
 

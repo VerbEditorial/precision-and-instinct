@@ -331,3 +331,19 @@
   .sound.playing .bars i:nth-child(4) { animation-delay: -0.15s; }
   @keyframes eq { from { height: 3px; } to { height: 14px; } }
   @media (prefers-reduced-motion: reduce) { .sound.playing .bars i { animation: none; height: 10px; } }
+  /* privacy page (written by tools/build_site.py) */
+  .legal { max-width: 720px; margin: 0 auto; padding: 48px 16px 8px; }
+  .legal-foot { max-width: 720px; }
+  .legal .kicker { color: var(--accent); }
+  .legal h1 { margin: 8px 0 12px; font-weight: 900; font-size: clamp(34px, 6vw, 56px); line-height: 1.04; letter-spacing: -0.02em; }
+  .legal .lede { font-size: 17px; color: var(--muted-78); margin: 0 0 8px; max-width: 58ch; }
+  .legal .updated { font-size: 13px; color: var(--muted-55); margin: 0 0 8px; }
+  .legal h2 { margin: 36px 0 8px; padding-top: 20px; border-top: 2px solid var(--divider); font-weight: 800; font-size: 21px; }
+  .legal p, .legal li { color: var(--muted-78); max-width: 62ch; }
+  .legal p { margin: 0 0 12px; }
+  .legal ul { margin: 0 0 12px; padding-left: 20px; }
+  .legal li { margin-bottom: 6px; }
+  .legal a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+  .legal a:hover { color: var(--accent-hi); }
+  footer .disclosure a { text-decoration: underline; text-underline-offset: 2px; }
+  footer .disclosure a:hover { color: var(--accent-hi); }

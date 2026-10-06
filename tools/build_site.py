@@ -9,7 +9,7 @@ It is NOT served as a page (noindex, and robots.txt disallows /tools/). This scr
   sitemap.xml, robots.txt
 
 Per-episode settings live in tools/cases.json (slug, h1, seo_title, description, og_image, and, for the newest
-episode, a "feature" block for the Latest case file box). Site-wide settings (analytics, signup, mailing address)
+episode, a "feature" block for the Latest case file box). Site-wide settings (analytics, signup)
 live in tools/site-config.json. The "Coming Sunday" teaser comes from tools/coming.json.
 Only RELEASED episodes get a page. An unreleased episode is refused, and must not be in tools/cases.json
 (or anywhere else in the public repo) until its release day.
@@ -192,10 +192,10 @@ def build_page(num, eps, hashes, blocks, cfg, urls, released_nums, preview, conf
     i = block.rfind(marker)
     if i < 0:
         die("end footer not found in case %s" % num)
-    form, address = signup_html(conf, preview)
+    form = signup_html(conf, preview)
     block = block[:i] + "".join(nav) + "\n    " + (form + "\n    " if form else "") + block[i:]
-    # footer: the AI-voice disclosure (verbatim), then the mailing address when the signup box is present
-    block, k = re.subn(r'(<footer style="text-align:left">.*?<p class="small">.*?</p>)', lambda m: m.group(1) + '\n      <p class="disclosure">%s</p>' % html.escape(DISCLOSURE, quote=False) + '\n      <p class="disclosure copyright">%s</p>' % html.escape(COPYRIGHT, quote=False) + (("\n      " + address) if address else ""), block, count=1, flags=re.S)
+    # footer: the AI-voice disclosure, then copyright and the privacy link. No mailing address on the website.
+    block, k = re.subn(r'(<footer style="text-align:left">.*?<p class="small">.*?</p>)', lambda m: m.group(1) + footer_lines(prefix, preview), block, count=1, flags=re.S)
     if k != 1:
         die("footer not found in case %s" % num)
     block = decorate_links(block, slug, "page")
@@ -260,8 +260,15 @@ def build_page(num, eps, hashes, blocks, cfg, urls, released_nums, preview, conf
 # ───────────────────────── site-wide pieces ─────────────────────────
 COPYRIGHT = "\u00a9 2026 Verb Editorial LLC. All rights reserved."
 DISCLOSURE = "The hosts are characters created by Verb Editorial. Their voices are AI-generated. All research, writing and production are done by a human team."
-ADDRESS_PLACEHOLDER = "[MAILING ADDRESS GOES HERE. Placeholder until the mail receiving address is chosen.]"
 TAPLINK_RE = re.compile(r'<a\b([^>]*?)href="(https://(?:precisionandinstinct\.taplink\.bio|rss\.com/podcasts/precision-instinct/[^"]*))"([^>]*)>')
+
+
+def footer_lines(prefix, preview):
+    """Disclosure, copyright and the privacy link (all pages). The website shows no mailing address."""
+    href = (prefix + "privacy.html") if preview else "/privacy/"
+    return ('\n      <p class="disclosure">%s</p>'
+            '\n      <p class="disclosure copyright">%s &middot; <a href="%s">Privacy</a></p>') % (
+        html.escape(DISCLOSURE, quote=False), html.escape(COPYRIGHT, quote=False), href)
 
 
 def e_ascii(text):
@@ -297,15 +304,14 @@ def decorate_links(markup, campaign, content):
 
 def signup_html(conf, preview):
     """The Sunday-email signup box. Left out of production builds until signup.live is true (MailerLite ids set).
-    The mailing address is NOT needed for the form: it is needed in the email template and the footer line, see golive_check.py --send."""
+    The website never shows a mailing address: it belongs only in the email footer (see golive_check.py --send)."""
     su = conf["signup"]
-    addr = conf.get("mailing_address", "").strip()
     live = bool(su.get("live"))
     if live:
         if not (su.get("mailerlite_account_id") and su.get("mailerlite_form_id")):
             die("signup.live is true but the MailerLite account id / form id are not set in tools/site-config.json")
     if not live and not preview:
-        return "", ""
+        return ""
     attrs = ' data-ml-account="%s" data-ml-form="%s"' % (su.get("mailerlite_account_id", ""), su.get("mailerlite_form_id", ""))
     if not live:
         attrs += ' data-offline="true"'
@@ -319,13 +325,7 @@ def signup_html(conf, preview):
             '%s'
             '      </form>\n'
             '    </section>') % (attrs, '' if live else '        <p class="offline-note">PREVIEW ONLY: this form is not connected yet. It stays out of the live site until MailerLite is set up.</p>\n')
-    if addr:
-        address = '<p class="mail-address">Precision &amp; Instinct, %s</p>' % e_ascii(addr)
-    elif preview:
-        address = '<p class="mail-address placeholder">%s</p>' % e_ascii(ADDRESS_PLACEHOLDER)
-    else:
-        address = ""   # no address yet: the live footer shows no address line (never a placeholder)
-    return form, address
+    return form
 
 
 def head_common(conf, prefix, preview):
@@ -429,14 +429,14 @@ def build_home(src, eps, hashes, cfg, released, conf, preview):
     home_block, k = re.subn(r'<div class="case-grid" id="case-grid"></div>', lambda m: grid_html(released, eps, case_href), home_block, count=1)
     if k != 1:
         die("home: empty case grid not found in site-source.html")
-    form, address = signup_html(conf, preview)
-    footer_extra = '\n      <p class="disclosure">%s</p>\n      <p class="disclosure copyright">%s</p>' % (html.escape(DISCLOSURE, quote=False), html.escape(COPYRIGHT, quote=False))
-    # signup sits just above the footer; disclosure and address go inside it
+    form = signup_html(conf, preview)
+    footer_extra = footer_lines(prefix, preview)
+    # signup sits just above the footer; disclosure, copyright and the privacy link go inside it
     foot = re.search(r"<footer>\s*(<p class=\"show-line\">.*?</p>)", home_block, re.S)
     if not foot:
         die("home: footer not found in site-source.html")
     home_block = home_block.replace("<footer>", (form + "\n\n    " if form else "") + "<footer>", 1)
-    home_block = home_block.replace(foot.group(1), foot.group(1) + footer_extra + (("\n      " + address) if address else ""), 1)
+    home_block = home_block.replace(foot.group(1), foot.group(1) + footer_extra, 1)
     home_block = decorate_links(home_block, "home", "page")
     # a sticky nav link to the grid
     url = SITE + "/"
@@ -538,6 +538,101 @@ TRACK_JS = r"""/* The RSS.com player is an iframe, so its clicks cannot be tagge
 """
 
 
+PRIVACY_CSS = """
+  /* privacy page (written by tools/build_site.py) */
+  .legal { max-width: 720px; margin: 0 auto; padding: 48px 16px 8px; }
+  .legal-foot { max-width: 720px; }
+  .legal .kicker { color: var(--accent); }
+  .legal h1 { margin: 8px 0 12px; font-weight: 900; font-size: clamp(34px, 6vw, 56px); line-height: 1.04; letter-spacing: -0.02em; }
+  .legal .lede { font-size: 17px; color: var(--muted-78); margin: 0 0 8px; max-width: 58ch; }
+  .legal .updated { font-size: 13px; color: var(--muted-55); margin: 0 0 8px; }
+  .legal h2 { margin: 36px 0 8px; padding-top: 20px; border-top: 2px solid var(--divider); font-weight: 800; font-size: 21px; }
+  .legal p, .legal li { color: var(--muted-78); max-width: 62ch; }
+  .legal p { margin: 0 0 12px; }
+  .legal ul { margin: 0 0 12px; padding-left: 20px; }
+  .legal li { margin-bottom: 6px; }
+  .legal a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+  .legal a:hover { color: var(--accent-hi); }
+  footer .disclosure a { text-decoration: underline; text-underline-offset: 2px; }
+  footer .disclosure a:hover { color: var(--accent-hi); }
+"""
+
+PRIVACY_BODY = """<main class="legal" id="main">
+  <span class="kicker">Privacy</span>
+  <h1>What we collect, and why</h1>
+  <p class="lede">Short version: we keep very little. Your email address if you join the Sunday email, and anonymous visit counts. Nothing else.</p>
+  <p class="updated">Last updated October 2026</p>
+
+  <h2>Your email address</h2>
+  <p>If you sign up for the Sunday email, we collect the email address you type in. That is the only personal information this site asks for. The signup is run through MailerLite, our email service, which stores the list and sends the emails for us.</p>
+  <p>We use your address to send you the Sunday email about each new case file, and for nothing else. We do not sell it.</p>
+
+  <h2>Anonymous visit counts</h2>
+  <p>We count visits with Plausible Analytics, a privacy-focused service. It does not use cookies and does not collect personal data about visitors. We see things like which pages are read, which country visits come from, and which site sent a visitor.</p>
+  <p>We also count clicks on the "Where to listen" and "Hear the whole debate" links, so we know whether the site is sending people to the episodes. These are counts, not records of who clicked.</p>
+
+  <h2>Unsubscribing</h2>
+  <p>Every email we send has an unsubscribe link at the bottom. Click it and you are off the list. If you would rather have your address deleted, write to us at the address below and we will remove it.</p>
+
+  <h2>Other services you may meet</h2>
+  <ul>
+    <li>The site is hosted on GitHub Pages. Like any web host, it receives your IP address when your browser loads a page.</li>
+    <li>The episode player on each case page comes from RSS.com, and the "Where to listen" page is on Taplink. When you use them you are on their sites, under their own privacy policies.</li>
+  </ul>
+
+  <h2>Contact</h2>
+  <p>Questions about this page, or want your address removed? Write to <a href="mailto:evidence@precisionandinstinct.com">evidence@precisionandinstinct.com</a>.</p>
+</main>
+"""
+
+
+def build_privacy(conf, preview):
+    prefix = "" if preview else "/"
+    home = "index.html" if preview else "/"
+    cases = "index.html#cases" if preview else "/#cases"
+    t, d = "Privacy | Precision & Instinct", "What the Precision & Instinct site collects: email addresses for the Sunday email, and anonymous visit counts. Plain language."
+    if preview:
+        seo = '<meta name="robots" content="noindex, nofollow">'
+    else:
+        seo = f"""<link rel="canonical" href="{SITE}/privacy/">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Precision &amp; Instinct">
+<meta property="og:title" content="{html.escape(t)}">
+<meta property="og:description" content="{html.escape(d)}">
+<meta property="og:url" content="{SITE}/privacy/">
+<meta property="og:image" content="{SITE}/img/landing/cover-hosts-v2-3000.jpg">
+<meta name="twitter:card" content="summary_large_image">"""
+    nav = decorate_links(f"""<nav class="nav">
+  <a class="nav-brand" href="{home}">PRECISION <span class="amp">&amp;</span> INSTINCT</a>
+  <a href="{cases}">Case files</a>
+  <a href="https://notes.precisionandinstinct.com/episodes/">Sources</a>
+  <a class="btn-primary" href="https://precisionandinstinct.taplink.bio">Where to listen &rarr;</a>
+</nav>
+""", "privacy", "nav")
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{html.escape(t)}</title>
+<meta name="description" content="{html.escape(d)}">
+{seo}
+{head_common(conf, prefix, preview)}</head>
+<body>
+
+{nav}
+{PRIVACY_BODY}
+<div class="wrap legal-foot">
+  <footer>
+    <p class="show-line">Precision &amp; Instinct with Simone Valdez and Eli Marchetti</p>{footer_lines(prefix, preview)}
+  </footer>
+</div>
+</body>
+</html>
+"""
+
+
 def email_sample(cfg, eps, released):
     """A filled-in copy of the Sunday email template (newest released case), for review only."""
     n = released[-1]
@@ -605,7 +700,7 @@ def main():
         out = pathlib.Path(a.preview_dir)
         (out / "cases").mkdir(parents=True, exist_ok=True)
         (out / "assets").mkdir(parents=True, exist_ok=True)
-        (out / "assets" / "site.css").write_text(css.replace('url("/img/', 'url("../img/'), encoding="utf-8")
+        (out / "assets" / "site.css").write_text((css + PRIVACY_CSS).replace('url("/img/', 'url("../img/'), encoding="utf-8")
         (out / "assets" / "case.js").write_text(case_js, encoding="utf-8")
         (out / "assets" / "home.js").write_text(home_js, encoding="utf-8")
         (out / "assets" / "signup.js").write_text(SIGNUP_JS, encoding="utf-8")
@@ -614,10 +709,12 @@ def main():
             print("preview /cases/%s.html  (episode %s)" % (cfg[n]["slug"], n))
         (out / "index.html").write_text(build_home(src, eps, hashes, cfg, released, conf, True), encoding="utf-8")
         print("preview index.html")
+        (out / "privacy.html").write_text(build_privacy(conf, True), encoding="utf-8")
+        print("preview privacy.html")
         (out / "email-sample.html").write_text(email_sample(cfg, eps, released), encoding="utf-8")
         return
     (ROOT / "assets").mkdir(exist_ok=True)
-    (ROOT / "assets" / "site.css").write_text(css, encoding="utf-8")
+    (ROOT / "assets" / "site.css").write_text(css + PRIVACY_CSS, encoding="utf-8")
     (ROOT / "assets" / "case.js").write_text(case_js, encoding="utf-8")
     (ROOT / "assets" / "home.js").write_text(home_js, encoding="utf-8")
     (ROOT / "assets" / "signup.js").write_text(SIGNUP_JS, encoding="utf-8")
@@ -629,9 +726,12 @@ def main():
         print("built /cases/%s/  (episode %s)" % (cfg[n]["slug"], n))
     (ROOT / "index.html").write_text(build_home(src, eps, hashes, cfg, released, conf, False), encoding="utf-8")
     print("built / (home)")
-    (ROOT / "sitemap.xml").write_text(sitemap_xml([SITE + "/"] + [SITE + urls[n] for n in released]), encoding="utf-8")
+    (ROOT / "privacy").mkdir(exist_ok=True)
+    (ROOT / "privacy" / "index.html").write_text(build_privacy(conf, False), encoding="utf-8")
+    print("built /privacy/")
+    (ROOT / "sitemap.xml").write_text(sitemap_xml([SITE + "/"] + [SITE + urls[n] for n in released] + [SITE + "/privacy/"]), encoding="utf-8")
     (ROOT / "robots.txt").write_text(ROBOTS, encoding="utf-8")
-    print("wrote sitemap.xml (%d URLs) and robots.txt" % (len(released) + 1))
+    print("wrote sitemap.xml (%d URLs) and robots.txt" % (len(released) + 2))
 
 if __name__ == "__main__":
     main()
