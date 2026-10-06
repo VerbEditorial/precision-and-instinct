@@ -66,7 +66,7 @@ No case text, clips, audio paths, case art or links to a case page. Unreleased e
 
 ## Analytics (Plausible)
 
-The script is added to every page by the build, using `tools/site-config.json` (`plausible`). Goals:
+The site's own Plausible snippet (script `pa-dbfu7oZwXJ6ainhEHEad1.js`) is added to every live page by the build, using `tools/site-config.json` (`plausible.script_src`). Previews never carry it. Outbound-link and tagged-event tracking are switched on in Plausible's site settings, not in our code. Goals:
 
 | Goal | How it fires |
 |---|---|

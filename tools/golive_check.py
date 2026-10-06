@@ -39,7 +39,7 @@ for f in built:
                      ("mail-address", "a mailing-address line (the website never shows one)"), ("noindex", "a noindex tag"), ("review=pi2026", "the old review switch")):
         if bad in t:
             problems.append("%s contains %s" % (f.relative_to(ROOT), why))
-    if "data-domain" not in t:
+    if "plausible.io/js/pa-" not in t:
         notes.append("%s has no analytics script (plausible.enabled is false?)" % f.relative_to(ROOT))
 
 # 3. signup and address

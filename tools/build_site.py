@@ -337,9 +337,12 @@ def head_common(conf, prefix, preview):
            '<link rel="stylesheet" href="%sassets/site.css">\n') % ((prefix,) * 5)
     pl = conf["plausible"]
     if pl.get("enabled") and not preview:
-        out += ('<script defer data-domain="%s" src="%s"></script>\n'
-                '<script>window.plausible=window.plausible||function(){(window.plausible.q=window.plausible.q||[]).push(arguments)}</script>\n'
-                % (pl["domain"], pl["script_src"]))
+        out += ('<!-- Privacy-friendly analytics by Plausible -->\n'
+                '<script async src="%s"></script>\n'
+                '<script>\n'
+                '  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};\n'
+                '  plausible.init()\n'
+                '</script>\n' % pl["script_src"])
     return out
 
 
