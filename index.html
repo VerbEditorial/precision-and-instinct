@@ -2950,8 +2950,6 @@
   ];
   /* an episode appears on the site from its release date (the fifth field); no date = already out */
   var today = new Date(); today = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
-  /* private review switch: ?review=pi2026 shows unreleased case files to the owner */
-  if (/[?&]review=pi2026(&|$|#)/.test(location.search + location.hash) || /[?&]review=pi2026/.test(location.search)) { today = '9999-12-31'; }
   /* PREVIEW SWITCH: true = unreleased case files can be opened (teaser cards are links). Set to false at go-live: the case file stays hidden, and its card is not a link, until the episode's release date. */
   var PREVIEW_TEASER_LINKS = false;
   var released = eps.filter(function (e) { return !e[4] || e[4] <= today; });
