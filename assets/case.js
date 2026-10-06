@@ -1,3 +1,4 @@
+var PI_BASE = window.PI_BASE || '/';
 (function () {
   function navH() { var n = document.querySelector('.nav'); if (n) document.documentElement.style.setProperty('--nav-h', n.offsetHeight + 'px'); }
   navH(); window.addEventListener('resize', navH);
@@ -153,7 +154,7 @@
   });
 
   /* ——— music bed: on by default; browsers only allow sound after the visitor's first click, tap or key press ——— */
-  var BED = 'audio/beds/bed-detective-theme.mp3';
+  var BED = PI_BASE + 'audio/beds/bed-detective-theme.mp3';
   var LEVEL = 0.5;
   var sound = document.getElementById('sound'), sbtn = document.getElementById('sound-btn');
   var ac = null, gain = null, srcNode = null, bedBuf = null, onCase = false;
@@ -190,7 +191,7 @@
   }
   function fadeOut() { if (ac && srcNode) { ramp(0, 0.8); stopNode(900); } }
   /* transition sting: plays over the bed as the color blocks clear */
-  var STING = 'audio/beds/sting-transition.mp3', stingBuf = null, lastSting = 0;
+  var STING = PI_BASE + 'audio/beds/sting-transition.mp3', stingBuf = null, lastSting = 0;
   function loadSting() {
     if (stingBuf || !ac) return;
     fetch(STING).then(function (r) { return r.arrayBuffer(); }).then(function (ab) {
@@ -205,7 +206,7 @@
   }
   /* intro theme: plays once each time a case file opens; stops for a clip or on leaving */
   /* intro and outro share one slot: starting one fades the other. Levels even out the two files (the outro is mixed ~3 dB quieter) */
-  var THEMES = { intro: { url: 'audio/beds/intro-theme.mp3', level: 0.85 }, outro: { url: 'audio/beds/outro-theme.mp3', level: 1.15 } };
+  var THEMES = { intro: { url: PI_BASE + 'audio/beds/intro-theme.mp3', level: 0.85 }, outro: { url: PI_BASE + 'audio/beds/outro-theme.mp3', level: 1.15 } };
   var themeBufs = {}, themeNode = null, themeG = null, outroDone = false;
   function loadTheme(k) {
     if (!themeBufs[k]) themeBufs[k] = fetch(THEMES[k].url).then(function (r) { return r.arrayBuffer(); }).then(function (ab) {
@@ -242,7 +243,7 @@
   /* case bed: loops under the reading, from the tail of the intro until the outro takes over */
   /* the file carries 1 s of the loop's own tail before it and head after it; looping between those fixed points
      keeps the MP3's padding out of the loop entirely, so there is no click */
-  var CBED = { url: 'audio/beds/bed-investigative.mp3', level: 1.0, loopStart: 1.0, loopLen: 28.5 };
+  var CBED = { url: PI_BASE + 'audio/beds/bed-investigative.mp3', level: 1.0, loopStart: 1.0, loopLen: 28.5 };
   var cbBuf = null, cbNode = null, cbG = null, cbTimer = null;
   function loadCaseBed() {
     if (!cbBuf) cbBuf = fetch(CBED.url).then(function (r) { return r.arrayBuffer(); }).then(function (ab) {

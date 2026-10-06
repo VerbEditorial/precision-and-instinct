@@ -1,8 +1,100 @@
 {
   "01": {
     "slug": "tamam-shud-somerton-man",
-    "seo_title": "Tamam Shud: The Somerton Man Case File | Precision & Instinct",
-    "description": "The Somerton Man, found on an Adelaide beach in 1948 with a scrap reading Tamám Shud. Evidence, timeline and clips from the Precision & Instinct debate.",
+    "h1": "Tamám Shud: The Somerton Man",
+    "seo_title": "Tamám Shud: The Somerton Man Case File | Precision & Instinct",
+    "description": "The Tamám Shud case: the Somerton Man, found on an Adelaide beach in 1948. Evidence, timeline and clips from the Precision & Instinct debate.",
     "og_image": "/img/01-somerton-man/beach-scene.jpg"
+  },
+  "02": {
+    "slug": "real-exorcist-roland-doe",
+    "h1": "The Real Exorcist: Roland Doe",
+    "seo_title": "The Real Exorcist: Roland Doe Case File | Precision & Instinct",
+    "description": "The 1949 exorcism of “Roland Doe”: a 13-year-old boy, a Ouija board and weeks of Catholic rites. Clips from the Precision & Instinct debate.",
+    "og_image": "/img/02-the-real-exorcist/evidence.jpg"
+  },
+  "03": {
+    "slug": "springfield-three",
+    "h1": "The Springfield Three",
+    "seo_title": "The Springfield Three Case File | Precision & Instinct",
+    "description": "Suzie Streeter, Stacy McCall and Sherrill Levitt vanished from a Springfield, Missouri home in June 1992. Clips from the Precision & Instinct debate.",
+    "og_image": "/img/03-the-springfield-three/evidence.jpg",
+    "h1_word_em": 7.3
+  },
+  "04": {
+    "slug": "black-dahlia-elizabeth-short",
+    "h1": "The Black Dahlia: Elizabeth Short",
+    "seo_title": "The Black Dahlia: Elizabeth Short Case File | Precision & Instinct",
+    "description": "Elizabeth Short was found in a Los Angeles vacant lot in January 1947. No one has been charged. Clips from the Precision & Instinct debate.",
+    "og_image": "/img/04-the-black-dahlia/scene.jpg"
+  },
+  "05": {
+    "slug": "boy-in-the-box-joseph-zarelli",
+    "h1": "The Boy in the Box: Joseph Zarelli",
+    "seo_title": "The Boy in the Box: Joseph Zarelli Case File | Precision & Instinct",
+    "description": "A boy found in a cardboard box in Philadelphia in 1957 stayed unnamed for 65 years. No one has been charged. Clips from the Precision & Instinct debate.",
+    "og_image": "/img/05-the-boy-in-the-box/scene.jpg"
+  },
+  "06": {
+    "slug": "pancho-villa-assassination",
+    "h1": "Pancho Villa Assassination: The Parral Ambush",
+    "seo_title": "Pancho Villa Assassination: The Parral Ambush Case File | Precision & Instinct",
+    "description": "Pancho Villa was shot dead in an ambush in Parral, Chihuahua, in 1923. Who sponsored it is still disputed. Clips from the Precision & Instinct debate.",
+    "og_image": "/img/06-pancho-villa-the-parral-ambush/hacienda.jpg",
+    "h1_word_em": 9.2
+  },
+  "07": {
+    "slug": "ethel-rosenberg-execution",
+    "h1": "Ethel Rosenberg Execution: The Typewriter",
+    "seo_title": "Ethel Rosenberg Execution: The Typewriter Case File | Precision & Instinct",
+    "description": "The 1953 execution of Ethel Rosenberg, and a typewriter story that first surfaced ten days before trial. Clips from the Precision & Instinct debate.",
+    "og_image": "/img/07-ethel-rosenberg-the-typewriter/evidence.jpg",
+    "h1_word_em": 7.2
+  },
+  "08": {
+    "slug": "bruno-llambrich-predateur-des-bois",
+    "h1": "Bruno Llambrich: Le Prédateur des Bois",
+    "seo_title": "Bruno Llambrich: Le Prédateur des Bois Case File | Precision & Instinct",
+    "description": "How a mail-order DNA kit and the FBI named “Le Prédateur des Bois” after more than a decade. Clips from the Precision & Instinct debate.",
+    "og_image": "/img/08-le-predateur-des-bois/evidence.jpg",
+    "h1_word_em": 6.8
+  },
+  "09": {
+    "slug": "kingsbury-run-torso-murders",
+    "h1": "The Mad Butcher of Kingsbury Run",
+    "seo_title": "The Mad Butcher of Kingsbury Run Case File | Precision & Instinct",
+    "description": "At least twelve bodies were left in Cleveland’s Kingsbury Run from 1934 to 1938. Eliot Ness never solved it. Clips from the Precision & Instinct debate.",
+    "og_image": "/img/09-the-mad-butcher-of-kingsbury-run/evidence.jpg",
+    "h1_word_em": 6.6
+  },
+  "10": {
+    "slug": "dag-hammarskjold-plane-crash",
+    "h1": "Dag Hammarskjöld: The Ndola Plane Crash",
+    "seo_title": "Dag Hammarskjöld: The Ndola Plane Crash Case File | Precision & Instinct",
+    "description": "A plane carrying the UN Secretary-General crashed in the Rhodesian bush in 1961. The UN’s inquiry is still open. Clips from the Precision & Instinct debate.",
+    "og_image": "/img/10-the-death-of-dag-hammarskjold/evidence.jpg",
+    "h1_word_em": 9.7
+  },
+  "11": {
+    "slug": "mack-ray-edwards-confessions",
+    "h1": "The Confessions of Mack Ray Edwards",
+    "seo_title": "The Confessions of Mack Ray Edwards Case File | Precision & Instinct",
+    "description": "In 1970 Mack Ray Edwards surrendered to Los Angeles police. He was convicted of three murders and claimed more. Clips from the Precision & Instinct debate.",
+    "og_image": "/img/11-the-confessions-of-mack-ray-edwards/evidence.jpg",
+    "h1_word_em": 7.9
+  },
+  "12": {
+    "slug": "gareth-williams-spy-in-a-bag",
+    "h1": "Spy in a Bag: The Death of Gareth Williams",
+    "seo_title": "Spy in a Bag: The Death of Gareth Williams Case File | Precision & Instinct",
+    "description": "GCHQ mathematician Gareth Williams was found in a padlocked holdall in his London flat in 2010. The case is still open. Clips from the Precision & Instinct debate.",
+    "og_image": "/img/12-gareth-williams/holdall.jpg"
+  },
+  "13": {
+    "slug": "mad-gasser-of-mattoon",
+    "h1": "The Mad Gasser of Mattoon",
+    "seo_title": "The Mad Gasser of Mattoon Case File | Precision & Instinct",
+    "description": "In September 1944 a small Illinois town reported a mysterious gas attacker. Nobody was ever arrested. Clips from the Precision & Instinct debate.",
+    "og_image": "/img/13-the-mad-gasser-of-mattoon/opening.jpg"
   }
 }
