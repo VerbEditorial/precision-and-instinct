@@ -28,7 +28,7 @@ Do these on the episode's Sunday, after it is live on RSS.com.
 
 1. **Add the files.** Copy the episode's `audio/NN-slug/` and `img/NN-slug/` folders from the Dropbox pipeline output into the repo.
 2. **Splice the case into `index.html`** with `render.py`, as for every episode.
-3. **Register it in `index.html`:** its row in the `eps` list (title, years, status, notes slug; no date), its line in `CASEFILES`, and its entry in the "latest case file" list (`FEATURE`).
+3. **Register it in `index.html`:** its row in the `eps` list (title, years, status, notes slug; no date; leave off the date field so it shows at once), its line in `CASEFILES` (`render.py` adds this), and its entry in the "latest case file" list (`FEATURE`).
 4. **Add its entry to `tools/cases.json`:**
    - `slug`: the URL ending, led by what people search for (e.g. `mad-gasser-of-mattoon`).
    - `h1`: the page headline, also led by the search term (e.g. `Tamám Shud: The Somerton Man`).
@@ -43,18 +43,21 @@ Do these on the episode's Sunday, after it is live on RSS.com.
 
 ## "Coming Sunday" teaser
 
-*Status: proposed. Not built yet, pending approval of the mock-up.*
-
 The home page shows one small teaser for the next unreleased episode, and nothing else about it:
-episode number, title, release date, and a one- or two-sentence hook that does not reveal the debate or the facts.
-No case text, clips, audio paths, case images or links to a case page.
+episode number, title, release date, a one- or two-sentence hook that does not reveal the debate or the facts,
+and the episode's small icon (`img/icons/epNN.png`, the only image allowed before release).
+No case text, clips, audio paths, case art or links to a case page. Unreleased episodes have **no row** in the `eps` list.
 
-The teaser is a tiny separate entry (`tools/coming.json`: number, title, date, hook), kept apart from the full case content
-so that adding or removing an episode never touches it. On release day the swap is:
+The teaser is a tiny separate file, `tools/coming.json` (number, title, date, hook), kept apart from the case content.
+`python3 tools/build_coming.py` writes it into the block between `<!--COMING-->` and `<!--/COMING-->` in `index.html`.
+The script refuses a past date, extra fields, or an episode that already has a case file.
 
-1. The released episode's full case file goes in (steps 1 to 5 above), which replaces its teaser.
-2. Edit `tools/coming.json` to the **next** episode: number, title, date, hook.
-3. Run the build; the teaser block on the home page updates.
+On release day the swap is:
+
+1. Add the released episode's full case file (steps 1 to 5 above). Its teaser is replaced by its card in the grid.
+2. Edit `tools/coming.json` to the **next** episode: number, title, date, hook. Put that episode's icon in `img/icons/`
+   (only the icon; its art and case files stay in Dropbox).
+3. Run `python3 tools/build_coming.py`. After the last episode, empty the block by hand.
 
 ## Building the pages
 

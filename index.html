@@ -128,6 +128,17 @@
   }
   .btn { align-self: flex-start; background: var(--accent); font-weight: 800; font-size: 14px; padding: 10px 16px; }
 
+  /* "Coming Sunday" teaser: number, title, date, hook and the small icon, nothing else. Written by tools/build_coming.py */
+  .coming { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 28px; align-items: center; padding: 24px 28px; margin-bottom: 48px; border: 1px dashed var(--muted-55); background: var(--panel); }
+  .coming-icon { display: flex; align-items: center; justify-content: center; align-self: stretch; background: var(--navy); padding: 12px; min-height: 140px; }
+  .coming-icon img { width: auto; height: 116px; max-width: 100%; object-fit: contain; }
+  .coming-body { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  .coming-k { font-weight: 700; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); }
+  .coming h2 { margin: 0; font-weight: 900; font-size: clamp(26px, 4vw, 38px); line-height: 1.08; letter-spacing: -0.02em; text-wrap: balance; }
+  .coming-n { display: block; font-family: var(--font-type); font-weight: 400; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted-65); margin-bottom: 6px; }
+  .coming p { margin: 0; max-width: 60ch; color: var(--muted-78); font-size: 16px; }
+  @media (max-width: 560px) { .coming { grid-template-columns: minmax(0, 1fr); gap: 16px; padding: 20px 16px; } .coming-icon { min-height: 0; justify-self: start; width: 96px; } .coming-icon img { height: 88px; } }
+
   .case-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 16px; }
   .case-card { display: flex; flex-direction: column; min-width: 0; background: var(--panel); outline: 1px solid transparent; transition: outline-color 0.2s ease; }
   .case-card:hover { outline-color: var(--accent); }
@@ -139,15 +150,6 @@
   .case-card .t { font-weight: 800; font-size: 15px; line-height: 1.25; }
   .case-card .facts { font-family: var(--font-type); font-size: 11.5px; letter-spacing: 0.5px; color: var(--muted-65); text-transform: uppercase; }
   .case-card .s { font-size: 12px; color: var(--muted-55); margin-top: auto; padding-top: 4px; }
-  .case-card.is-next { outline: 1px dashed var(--muted-55); cursor: default; }
-  .case-card.is-next:hover { outline-color: var(--muted-55); }
-  .case-card.is-next .thumb img { filter: grayscale(0.5) brightness(0.32) blur(1.5px); transform: scale(1.06); }
-  .case-card.is-next:hover .thumb img { transform: scale(1.06); }
-  .next-over { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-align: center; padding: 12px; }
-  .next-over .k { font-weight: 700; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); }
-  .next-over .d { font-weight: 900; font-size: clamp(28px, 4vw, 42px); letter-spacing: -0.02em; line-height: 1; }
-  .next-over .w { font-family: var(--font-type); font-size: 12px; color: var(--muted-78); }
-  .case-card.is-next .s { color: var(--muted-65); }
   .case-card.is-open .s { color: var(--accent); font-weight: 700; }
 
   /* ———————————— CASE ———————————— */
@@ -371,6 +373,17 @@
         </div>
       </a>
     </section>
+
+    <!--COMING-->
+    <section class="coming" aria-labelledby="coming-h">
+      <div class="coming-icon"><img src="img/icons/ep14.png" alt="" width="479" height="700"></div>
+      <div class="coming-body">
+        <span class="coming-k">Coming Sunday &middot; <time datetime="2026-10-11">October 11</time></span>
+        <h2 id="coming-h"><span class="coming-n">Episode 14</span>The Hall&#8211;Mills Murders</h2>
+        <p>A minister. A choir singer. A crabapple tree in New Jersey, 1922. Eli and Simone argue over what the evidence can and can't prove.</p>
+      </div>
+    </section>
+    <!--/COMING-->
 
     <section aria-labelledby="all">
       <div class="section-head"><h2 id="all">All cases</h2><span class="count">14 episodes &middot; 14 case files open</span></div>
@@ -2946,10 +2959,7 @@
     ['The Death of Dag Hammarskjöld', '1961–2026', 'Open Investigation', '10-the-death-of-dag-hammarskjold'],
     ['The Confessions of Mack Ray Edwards', '1953–2011', 'Unresolved Claims', '11-the-confessions-of-mack-ray-edwards'],
     ['Spy in a Bag: The Death of Gareth Williams', '2010', 'Unsolved', '12-the-death-of-gareth-williams'],
-    ['The Mad Gasser of Mattoon', '1944', 'Unsolved', '13-the-mad-gasser-of-mattoon', '2026-10-04'],
-    ['The Hall–Mills Murders', '1922', 'Unsolved', '14-the-hall-mills-murders', '2026-10-11'],
-    ['The Chicago Tylenol Murders', '1982', 'Open Case', '15-the-chicago-tylenol-murders', '2026-10-18'],
-    ['The Disappearance of Jimmy Hoffa', '1975', 'Open Case', '16-the-disappearance-of-jimmy-hoffa', '2026-10-25']
+    ['The Mad Gasser of Mattoon', '1944', 'Unsolved', '13-the-mad-gasser-of-mattoon', '2026-10-04']
   ];
   /* an episode appears on the site from its release date (the fifth field); no date = already out */
   var today = new Date(); today = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
@@ -3008,37 +3018,6 @@
     a.querySelector('.body p').textContent = f.blurb;
     var c = document.querySelector('#latest + .count'); if (c) c.innerHTML = 'Episode ' + newest + ' &middot; Updated each Sunday';
   })();
-
-  /* "Next case" teaser: the next episode still waiting for its release date */
-  var upcoming = eps.map(function (e, i) { return { e: e, n: String(i + 1).padStart(2, '0') }; })
-    .filter(function (x) { return x.e[4] && x.e[4] > today; })
-    .sort(function (a, b) { return a.e[4] < b.e[4] ? -1 : 1; });
-  /* preview aid: one teaser per unreleased episode (live site: first only; remove at go-live) */
-  upcoming.forEach(function (upcoming) {
-    var parts = upcoming.e[4].split('-'), rel = new Date(+parts[0], +parts[1] - 1, +parts[2]);
-    var t0 = new Date(); t0 = new Date(t0.getFullYear(), t0.getMonth(), t0.getDate());
-    var days = Math.round((rel - t0) / 86400000);
-    var when = days === 1 ? 'tomorrow' : 'in ' + days + ' days';
-    var nd = rel.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-    var wd = rel.toLocaleDateString('en-US', { weekday: 'long' });
-    var nx = document.createElement('div');
-    nx.className = 'case-card is-next';
-    nx.innerHTML = '<div class="thumb"><img src="img/art/ep' + upcoming.n + '.jpg" alt="" loading="lazy" width="800" height="800">' +
-      '<div class="next-over"><span class="k">Next case</span><span class="d"></span><span class="w"></span></div></div>' +
-      '<div class="meta"><span class="ep-badge">EP ' + upcoming.n + '</span><span class="t"></span><span class="facts"></span><span class="s"></span></div>';
-    nx.querySelector('.d').textContent = nd;
-    nx.querySelector('.w').textContent = wd + ' · ' + when;
-    nx.querySelector('.t').textContent = upcoming.e[0];
-    nx.querySelector('.facts').textContent = 'Case ' + upcoming.n + ' · ' + upcoming.e[1] + ' · ' + upcoming.e[2];
-    nx.querySelector('.s').textContent = 'Episode and case file open ' + wd + ', ' + nd;
-    if (PREVIEW_TEASER_LINKS && CASEFILES[upcoming.n]) {
-      nx.style.cursor = 'pointer'; nx.setAttribute('role', 'link'); nx.tabIndex = 0;
-      var go = function () { location.hash = CASEFILES[upcoming.n]; };
-      nx.addEventListener('click', go);
-      nx.addEventListener('keydown', function (ev) { if (ev.key === 'Enter') go(); });
-    }
-    grid.appendChild(nx);
-  });
 
   var motion = window.gsap && window.ScrollTrigger && window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
   if (motion) { document.documentElement.classList.add('motion'); gsap.registerPlugin(ScrollTrigger); }

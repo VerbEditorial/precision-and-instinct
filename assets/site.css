@@ -116,6 +116,17 @@
   }
   .btn { align-self: flex-start; background: var(--accent); font-weight: 800; font-size: 14px; padding: 10px 16px; }
 
+  /* "Coming Sunday" teaser: number, title, date, hook and the small icon, nothing else. Written by tools/build_coming.py */
+  .coming { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 28px; align-items: center; padding: 24px 28px; margin-bottom: 48px; border: 1px dashed var(--muted-55); background: var(--panel); }
+  .coming-icon { display: flex; align-items: center; justify-content: center; align-self: stretch; background: var(--navy); padding: 12px; min-height: 140px; }
+  .coming-icon img { width: auto; height: 116px; max-width: 100%; object-fit: contain; }
+  .coming-body { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  .coming-k { font-weight: 700; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); }
+  .coming h2 { margin: 0; font-weight: 900; font-size: clamp(26px, 4vw, 38px); line-height: 1.08; letter-spacing: -0.02em; text-wrap: balance; }
+  .coming-n { display: block; font-family: var(--font-type); font-weight: 400; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted-65); margin-bottom: 6px; }
+  .coming p { margin: 0; max-width: 60ch; color: var(--muted-78); font-size: 16px; }
+  @media (max-width: 560px) { .coming { grid-template-columns: minmax(0, 1fr); gap: 16px; padding: 20px 16px; } .coming-icon { min-height: 0; justify-self: start; width: 96px; } .coming-icon img { height: 88px; } }
+
   .case-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 16px; }
   .case-card { display: flex; flex-direction: column; min-width: 0; background: var(--panel); outline: 1px solid transparent; transition: outline-color 0.2s ease; }
   .case-card:hover { outline-color: var(--accent); }
@@ -127,15 +138,6 @@
   .case-card .t { font-weight: 800; font-size: 15px; line-height: 1.25; }
   .case-card .facts { font-family: var(--font-type); font-size: 11.5px; letter-spacing: 0.5px; color: var(--muted-65); text-transform: uppercase; }
   .case-card .s { font-size: 12px; color: var(--muted-55); margin-top: auto; padding-top: 4px; }
-  .case-card.is-next { outline: 1px dashed var(--muted-55); cursor: default; }
-  .case-card.is-next:hover { outline-color: var(--muted-55); }
-  .case-card.is-next .thumb img { filter: grayscale(0.5) brightness(0.32) blur(1.5px); transform: scale(1.06); }
-  .case-card.is-next:hover .thumb img { transform: scale(1.06); }
-  .next-over { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-align: center; padding: 12px; }
-  .next-over .k { font-weight: 700; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); }
-  .next-over .d { font-weight: 900; font-size: clamp(28px, 4vw, 42px); letter-spacing: -0.02em; line-height: 1; }
-  .next-over .w { font-family: var(--font-type); font-size: 12px; color: var(--muted-78); }
-  .case-card.is-next .s { color: var(--muted-65); }
   .case-card.is-open .s { color: var(--accent); font-weight: 700; }
 
   /* ———————————— CASE ———————————— */
@@ -147,7 +149,6 @@
   .c-open .copy .kicker { display: flex; justify-content: space-between; gap: 12px; }
   .c-open .dateline { font-family: var(--font-type); font-size: clamp(14px, 2.2vw, 18px); color: var(--muted-78); margin: 0 0 12px; }
   .c-open h1 { font-weight: 900; font-size: clamp(44px, 10vw, 112px); letter-spacing: -0.03em; line-height: 0.9; text-transform: uppercase; margin: 0; }
-  @media (max-width: 600px) { .case-view[data-hash="#the-disappearance-of-jimmy-hoffa"] .c-open h1 { font-size: clamp(30px, 8.4vw, 44px); } }
   .c-open .back { font-size: 13px; color: var(--muted-72); }
   .c-icon { position: absolute; left: 7%; top: 22%; width: auto; height: auto; max-width: clamp(150px, 20vw, 260px); max-height: clamp(150px, 32vh, 280px); transform: rotate(-7deg); filter: drop-shadow(0 22px 34px rgba(0,0,0,0.65)); z-index: 2; pointer-events: none; }
   .c-icon.right { left: auto; right: 7%; transform: rotate(8deg); }
