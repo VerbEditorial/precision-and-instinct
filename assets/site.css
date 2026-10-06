@@ -127,6 +127,26 @@
   .coming p { margin: 0; max-width: 60ch; color: var(--muted-78); font-size: 16px; }
   @media (max-width: 560px) { .coming { grid-template-columns: minmax(0, 1fr); gap: 16px; padding: 20px 16px; } .coming-icon { min-height: 0; justify-self: start; width: 96px; } .coming-icon img { height: 88px; } }
 
+  /* disclosure, signup and footer address (written by tools/build_site.py) */
+  .disclosure { margin: 6px 0 0; max-width: 62ch; color: var(--muted-72); font-size: 13px; }
+  .signup { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; align-items: center; margin: 0 0 48px; padding: 28px; border: 1px solid var(--divider); background: var(--panel); }
+  .signup .k { font-weight: 700; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); }
+  .signup h2 { margin: 6px 0 8px; font-weight: 900; font-size: clamp(24px, 3.4vw, 32px); line-height: 1.1; letter-spacing: -0.02em; }
+  .signup p { margin: 0; color: var(--muted-78); font-size: 15px; max-width: 46ch; }
+  .signup form { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  .signup label { font-family: var(--font-type); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; color: var(--muted-65); }
+  .signup .row { display: flex; gap: 8px; }
+  .signup input { flex: 1; min-width: 0; font: inherit; font-size: 16px; color: var(--text); background: var(--bg); border: 1px solid var(--muted-55); padding: 11px 12px; border-radius: 0; }
+  .signup input:focus-visible, .signup button:focus-visible { outline: 2px solid var(--accent-hi); outline-offset: 2px; }
+  .signup button { font: inherit; font-weight: 800; font-size: 14px; color: var(--text); background: var(--accent); border: 0; padding: 11px 18px; cursor: pointer; border-radius: 0; }
+  .signup button:disabled { opacity: 0.6; cursor: default; }
+  .signup .msg { min-height: 1.4em; font-size: 14px; color: var(--muted-78); }
+  .signup .msg.err { color: #e7a58a; }
+  .signup .offline-note { font-family: var(--font-type); font-size: 12px; color: var(--accent-hi); }
+  .mail-address { margin: 10px 0 0; font-size: 12.5px; color: var(--muted-65); }
+  .mail-address.placeholder { color: var(--accent-hi); font-family: var(--font-type); }
+  @media (max-width: 720px) { .signup { grid-template-columns: minmax(0, 1fr); padding: 22px 16px; gap: 16px; } .signup .row { flex-direction: column; } }
+
   .case-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 16px; }
   .case-card { display: flex; flex-direction: column; min-width: 0; background: var(--panel); outline: 1px solid transparent; transition: outline-color 0.2s ease; }
   .case-card:hover { outline-color: var(--accent); }

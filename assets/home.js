@@ -4,28 +4,10 @@ var PI_BASE = (typeof window.PI_BASE === 'string') ? window.PI_BASE : '/';
   navH(); window.addEventListener('resize', navH);
 })();
 (function () {
-  /* episode player: RSS.com embed on the live site; the preview host blocks iframes, so it keeps the link card */
-  var host = location.hostname;
-  var canEmbed = !/claude|anthropic/.test(host);
-  if (canEmbed) {
-    document.querySelectorAll('.player[data-rss-ep]').forEach(function (p) {
-      var f = document.createElement('iframe');
-      f.src = 'https://player.rss.com/' + p.dataset.rssShow + '/' + p.dataset.rssEp + '?theme=dark&v=2';
-      f.title = p.dataset.title || 'Episode player';
-      f.loading = 'lazy';
-      f.setAttribute('scrolling', 'no');
-      f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-      f.allowFullscreen = true;
-      p.innerHTML = '';
-      p.appendChild(f);
-    });
-  }
-})();
-(function () {
   var motion = window.gsap && window.ScrollTrigger && window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
   if (motion) { document.documentElement.classList.add('motion'); gsap.registerPlugin(ScrollTrigger); }
 
-  var cases = Array.prototype.slice.call(document.querySelectorAll('.case-view'));
+  var home = document.getElementById('view-home');
   var ctx = null;
 
   function scrub(trigger, start, end, extra) {
@@ -33,125 +15,40 @@ var PI_BASE = (typeof window.PI_BASE === 'string') ? window.PI_BASE : '/';
   }
 
   var heroStingFired = false;
-
-  function buildCase(root) {
-    var q = gsap.utils.selector(root);
-    function el(sel) { return root.querySelector(sel); }
-
-    /* opening: pin, slow push out of the photo, title rises */
-    var open = gsap.timeline({ scrollTrigger: scrub(el('.c-open'), 'top top', '+=90%', { pin: true }) });
-    open.fromTo(q('.c-open .bg'), { scale: 1.35 }, { scale: 1, ease: 'none' }, 0)
-        .fromTo(q('.c-open .veil'), { opacity: 0.35 }, { opacity: 1, ease: 'none' }, 0)
-        .fromTo(q('.c-open .c-title'), { y: 60 }, { y: -30, ease: 'none' }, 0)
-        .fromTo(q('.c-icon'), { y: 30, rotation: -10 }, { y: -140, rotation: 5, ease: 'none' }, 0);
-
-    gsap.fromTo(q('.lede > *'), { y: 40, opacity: 0 }, { y: 0, opacity: 1, overwrite: true, stagger: 0.15, duration: 0.8, ease: 'power2.out', scrollTrigger: { trigger: el('.lede'), start: 'top 80%' } });
-
-    /* evidence scene: pinned; the photo holds with one slow push-in while the points build up beside it.
-       Wide screens keep earlier points on screen (dimmed); phones show one point at a time. */
-    var caps = q('.carry .cap');
-    var bars = q('.carry .progress b');
-    if (caps.length) {
-    var stack = window.matchMedia('(min-width: 721px)').matches;
-    var img = el('.carry .frame img');
-    /* fit: on wide screens every point stays stacked, so shrink the type until the stack fits the pinned screen (keeps long points from spilling onto the clip below) */
-    var capBox = el('.carry .caps');
-    function fitCaps() {
-      var ps = Array.prototype.slice.call(root.querySelectorAll('.carry .cap p'));
-      ps.forEach(function (x) { x.style.fontSize = ''; });
-      if (!window.matchMedia('(min-width: 721px)').matches || !capBox) return;
-      var size = parseFloat(getComputedStyle(ps[0]).fontSize), limit = window.innerHeight * 0.82;
-      while (capBox.getBoundingClientRect().height > limit && size > 15) { size -= 1; ps.forEach(function (x) { x.style.fontSize = size + 'px'; }); }
-    }
-    fitCaps();
-    var fitTimer;
-    window.addEventListener('resize', function () { clearTimeout(fitTimer); fitTimer = setTimeout(function () { fitCaps(); ScrollTrigger.refresh(); }, 250); });
-    gsap.set(caps, { autoAlpha: 0, y: 24 });
-    gsap.set(caps[0], { autoAlpha: 1, y: 0 });
-    var carry = gsap.timeline({ scrollTrigger: scrub(el('.carry'), 'top top', '+=320%', { pin: true }) });
-    carry.to(bars[0], { scaleX: 1, duration: 1, ease: 'none' });
-    for (var i = 1; i < caps.length; i++) {
-      carry.to(caps[i - 1], stack ? { opacity: 0.35, duration: 0.4 } : { autoAlpha: 0, y: -24, duration: 0.3 })
-           .to(caps[i], { autoAlpha: 1, y: 0, duration: 0.4 }, stack ? '<' : '-=0.1')
-           .to(bars[i], { scaleX: 1, duration: 1, ease: 'none' });
-    }
-    carry.fromTo(img, { scale: 1 }, { scale: 1.12, ease: 'none', duration: carry.duration() }, 0);
-    }
-
-    /* suitcase: photo opens like a lid, items check off */
-    if (el('.reveal-img')) gsap.fromTo(q('.reveal-img'), { clipPath: 'inset(50% 0% 50% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', ease: 'none', scrollTrigger: scrub(el('.split-scene'), 'top 85%', 'top 35%') });
-    if (el('.items')) gsap.from(q('.items li'), { x: -30, opacity: 0, stagger: 0.2, ease: 'none', scrollTrigger: scrub(el('.items'), 'top 85%', 'bottom 60%') });
-
-    /* the scrap: letters close in */
-    if (el('.scrap')) gsap.fromTo(q('.scrap'), { letterSpacing: '0.5em', opacity: 0 }, { letterSpacing: '0em', opacity: 1, ease: 'none', scrollTrigger: scrub(el('.scrap'), 'top 95%', 'top 45%') });
-
-    /* the code: letters scramble, then settle as you scroll */
-    var lines = q('.code-lines .cl');
-    if (lines.length) {
-    var finals = lines.map(function (l) { if (!l.dataset.final) l.dataset.final = l.textContent; return l.dataset.final; });    var total = finals.join('').length;
-    var ABC = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    function render(p) {
-      var settled = Math.floor(p * total), k = 0;
-      lines.forEach(function (l, li) {
-        var s = '', f = finals[li];
-        for (var c = 0; c < f.length; c++, k++) s += k < settled ? f[c] : ABC[(Math.random() * 26) | 0];
-        l.textContent = s;
-      });
-    }
-    render(0);
-    ScrollTrigger.create({ trigger: el('.code-sheet'), start: 'top 85%', end: 'center 45%', onUpdate: function (self) { render(self.progress); }, onLeave: function () { render(1); } });
-    }
-
-    /* two verdicts close in on the seam */
-    if (el('.verdicts')) {
-      gsap.from(q('.verdicts .v-a'), { xPercent: -105, ease: 'none', scrollTrigger: scrub(el('.verdicts'), 'top 95%', 'top 45%') });
-      gsap.from(q('.verdicts .v-b'), { xPercent: 105, ease: 'none', scrollTrigger: scrub(el('.verdicts'), 'top 95%', 'top 45%') });
-    }
-
-    /* timeline: vertical scroll drives a horizontal track */
-    var track = el('.tl-track');
-    function dist() { return Math.max(0, track.scrollWidth - window.innerWidth + 32); }
-    gsap.to(track, { x: function () { return -dist(); }, ease: 'none',
-      scrollTrigger: { trigger: el('.tl-pin'), start: 'top top', end: function () { return '+=' + dist(); }, pin: true, scrub: true, invalidateOnRefresh: true } });
-
-    /* the two readings slide in from opposite sides */
-    gsap.from(q('.brief-precision'), { xPercent: -110, ease: 'none', scrollTrigger: scrub(el('.briefs'), 'top 95%', 'top 45%') });
-    gsap.from(q('.brief-instinct'), { xPercent: 110, ease: 'none', scrollTrigger: scrub(el('.briefs'), 'top 95%', 'top 45%') });
-
-    /* no verdict */
-    gsap.fromTo(q('.nv'), { scale: 0.7, opacity: 0 }, { scale: 1, opacity: 1, ease: 'none', scrollTrigger: scrub(el('.verdict'), 'top 90%', 'top 40%') });
-    gsap.fromTo(q('.questions li'), { y: 30, opacity: 0 }, { y: 0, opacity: 1, overwrite: true, stagger: 0.15, duration: 0.7, ease: 'power2.out', scrollTrigger: { trigger: el('.questions'), start: 'top 85%' } });
+  function buildHome() {
+    var hero = gsap.timeline({ scrollTrigger: scrub('.home-hero', 'top top', '+=110%', { pin: true,
+      onUpdate: function (self) {
+        /* fire the sting so its hit (about 1.8s in) lands as the blocks clear */
+        if (self.progress < 0.02) { heroStingFired = false; return; }
+        if (heroStingFired || self.direction < 0) return;
+        var remaining = (1 - self.progress) * (self.end - self.start);
+        var v = Math.max(Math.abs(self.getVelocity()), 1);
+        if ((self.progress > 0.25 && remaining / v <= 1.75) || self.progress >= 0.8) { heroStingFired = true; playSting(); }
+      },
+      onLeave: function () { if (!heroStingFired) { heroStingFired = true; playSting(); } } }) });
+    hero.to('.hh-navy', { xPercent: -100, ease: 'power1.in' }, 0)
+        .to('.hh-rust', { xPercent: 100, ease: 'power1.in' }, 0)
+        .fromTo('.hh-photo', { scale: 1.25 }, { scale: 1, ease: 'none' }, 0)
+        .to('.wordmark-xl', { scale: 0.82, ease: 'none' }, 0)
+        .to('.hh-foot', { opacity: 0, y: 20, ease: 'none', duration: 0.3 }, 0);
+    gsap.fromTo('.how > div', { y: 30, opacity: 0 }, { y: 0, opacity: 1, overwrite: true, stagger: 0.12, duration: 0.7, ease: 'power2.out', scrollTrigger: { trigger: '.how', start: 'top 85%' } });
+    gsap.fromTo('.featured', { y: 50, opacity: 0 }, { y: 0, opacity: 1, overwrite: true, duration: 0.8, ease: 'power2.out', scrollTrigger: { trigger: '.featured', start: 'top 85%' } });
+    ScrollTrigger.batch('.case-card', { start: 'top 90%', once: true, onEnter: function (b) { gsap.fromTo(b, { y: 40, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.08, duration: 0.6, ease: 'power2.out', overwrite: true, clearProps: 'transform' }); } });
   }
 
   function show() {
-    var active = cases[0];
     if (ctx) { ctx.revert(); ctx = null; }
     document.querySelectorAll('.code-lines .cl').forEach(function (l) { if (l.dataset.final) l.textContent = l.dataset.final; });
-    if (typeof bedForView === 'function') bedForView(true);
+    if (typeof bedForView === 'function') bedForView(false);
     if (motion) {
-      ctx = gsap.context(function () { buildCase(active); }, active);
+      ctx = gsap.context(buildHome);
       ScrollTrigger.refresh();
     }
+    /* arriving from a case page's 'All case files' link lands on the grid; anything else starts at the top */
+    var place = function () { var t = document.getElementById('cases'); if (location.hash === '#cases' && t) t.scrollIntoView(); else window.scrollTo(0, 0); };
+    place(); requestAnimationFrame(place);
+    setTimeout(function () { place(); if (motion) ScrollTrigger.update(); }, 60);
   }
-
-  /* audio clips: one at a time; a missing file shows as "Clip coming" */
-  document.querySelectorAll('[data-clip]').forEach(function (fig) {
-    var a = fig.querySelector('audio'), btn = fig.querySelector('.clip-btn'), st = fig.querySelector('.clip-state'), bar = fig.querySelector('.clip-bar i');
-    function off(msg) { fig.classList.add('unavailable'); fig.classList.remove('playing'); st.textContent = msg; btn.disabled = true; }
-    a.addEventListener('error', function () { off('Clip coming'); });
-    a.addEventListener('timeupdate', function () { if (a.duration) bar.style.width = (a.currentTime / a.duration * 100) + '%'; });
-    a.addEventListener('ended', function () { fig.classList.remove('playing'); st.textContent = 'Listen again'; });
-    btn.addEventListener('click', function () {
-      if (a.paused) {
-        document.querySelectorAll('[data-clip] audio').forEach(function (o) { if (o !== a) o.pause(); });
-        document.querySelectorAll('[data-clip].playing').forEach(function (f) { if (f !== fig) f.classList.remove('playing'); });
-        var pr = a.play();
-        if (pr && pr.catch) pr.catch(function () { off('Clip coming'); });
-        fig.classList.add('playing'); st.textContent = 'Playing';
-      } else { a.pause(); fig.classList.remove('playing'); st.textContent = 'Paused'; }
-    });
-    fetch(a.getAttribute('src'), { method: 'HEAD' }).then(function (r) { if (!r.ok) off('Clip coming'); }).catch(function () { off('Clip coming'); });
-  });
 
   /* ——— music bed: on by default; browsers only allow sound after the visitor's first click, tap or key press ——— */
   var BED = PI_BASE + 'audio/beds/bed-detective-theme.mp3';
@@ -333,6 +230,7 @@ var PI_BASE = (typeof window.PI_BASE === 'string') ? window.PI_BASE : '/';
   }
   setUI();
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  window.addEventListener('hashchange', show);
   show();
 })();
 

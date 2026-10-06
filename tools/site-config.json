@@ -1,0 +1,13 @@
+{
+  "plausible": {
+    "enabled": true,
+    "domain": "precisionandinstinct.com",
+    "script_src": "https://plausible.io/js/script.tagged-events.outbound-links.js"
+  },
+  "signup": {
+    "live": false,
+    "mailerlite_account_id": "",
+    "mailerlite_form_id": ""
+  },
+  "mailing_address": ""
+}

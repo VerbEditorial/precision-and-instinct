@@ -95,6 +95,12 @@
     "h1": "The Mad Gasser of Mattoon",
     "seo_title": "The Mad Gasser of Mattoon Case File | Precision & Instinct",
     "description": "In September 1944 a small Illinois town reported a mysterious gas attacker. Nobody was ever arrested. Clips from the Precision & Instinct debate.",
-    "og_image": "/img/13-the-mad-gasser-of-mattoon/opening.jpg"
+    "og_image": "/img/13-the-mad-gasser-of-mattoon/opening.jpg",
+    "feature": {
+      "img": "img/13-the-mad-gasser-of-mattoon/opening.jpg",
+      "alt": "Illustration: a balled-up cloth, a skeleton key and a lipstick tube on weathered porch boards at night",
+      "place": "Mattoon, Illinois · 1944",
+      "blurb": "A small Illinois town reported a mysterious gas attacker in September 1944. Nobody was ever arrested, and one porch left physical evidence behind."
+    }
   }
 }
