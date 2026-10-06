@@ -82,10 +82,11 @@ Create the site in Plausible and add these three custom-event goals by name. Lin
 
 The Sunday-email box is built from `tools/site-config.json`:
 
-- `signup.live` (false until everything below is true), `signup.mailerlite_account_id`, `signup.mailerlite_form_id`, `mailing_address`.
-- While `live` is false, the box and the address line are **left out of the live site**. Preview builds show them with a clear "PREVIEW ONLY" note and a placeholder address.
-- The build refuses `live: true` without both MailerLite ids and a real address.
-- Before going live, add MailerLite's SPF, DKIM and DMARC records in GoDaddy DNS (never change the website records).
+- `signup.live` (false until MailerLite is ready), `signup.mailerlite_account_id`, `signup.mailerlite_form_id`, `mailing_address`.
+- While `live` is false, the box is **left out of the live site**. Preview builds show it with a "PREVIEW ONLY" note.
+- The build refuses `live: true` without both MailerLite ids. The form does **not** need the mailing address.
+- The mailing address is needed in the **email template** and the **footer line**. Until `mailing_address` is set, the live footer shows no address line (never a placeholder) and `python3 tools/golive_check.py --send` fails: do not send any email before that.
+- Before the first email, add MailerLite's SPF, DKIM and DMARC records in GoDaddy DNS (never change the website records), and paste the real address into the template.
 
 ## AI-voice disclosure
 

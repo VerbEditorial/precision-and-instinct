@@ -295,15 +295,14 @@ def decorate_links(markup, campaign, content):
 
 
 def signup_html(conf, preview):
-    """The Sunday-email signup box. Left out of production builds until signup.live is true AND a mailing address is set."""
+    """The Sunday-email signup box. Left out of production builds until signup.live is true (MailerLite ids set).
+    The mailing address is NOT needed for the form: it is needed in the email template and the footer line, see golive_check.py --send."""
     su = conf["signup"]
     addr = conf.get("mailing_address", "").strip()
     live = bool(su.get("live"))
     if live:
         if not (su.get("mailerlite_account_id") and su.get("mailerlite_form_id")):
             die("signup.live is true but the MailerLite account id / form id are not set in tools/site-config.json")
-        if not addr:
-            die("signup.live is true but mailing_address is empty. The signup form must not go live without a real mailing address.")
     if not live and not preview:
         return "", ""
     attrs = ' data-ml-account="%s" data-ml-form="%s"' % (su.get("mailerlite_account_id", ""), su.get("mailerlite_form_id", ""))
@@ -318,11 +317,13 @@ def signup_html(conf, preview):
             '        <p class="msg" role="status" aria-live="polite"></p>\n'
             '%s'
             '      </form>\n'
-            '    </section>') % (attrs, '' if live else '        <p class="offline-note">PREVIEW ONLY: this form is not connected yet. It stays out of the live site until the mailing address and MailerLite are set.</p>\n')
+            '    </section>') % (attrs, '' if live else '        <p class="offline-note">PREVIEW ONLY: this form is not connected yet. It stays out of the live site until MailerLite is set up.</p>\n')
     if addr:
         address = '<p class="mail-address">Precision &amp; Instinct, %s</p>' % e_ascii(addr)
-    else:
+    elif preview:
         address = '<p class="mail-address placeholder">%s</p>' % e_ascii(ADDRESS_PLACEHOLDER)
+    else:
+        address = ""   # no address yet: the live footer shows no address line (never a placeholder)
     return form, address
 
 

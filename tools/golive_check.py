@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Checks to run before merging to main. Prints what is wrong; exit code 1 if anything is.
 
-  python3 tools/golive_check.py
+  python3 tools/golive_check.py          # before merging to main
+  python3 tools/golive_check.py --send   # before the FIRST Sunday email: also needs a real mailing address
 """
 import json, pathlib, re, sys
 
@@ -44,13 +45,23 @@ for f in built:
 # 3. signup and address
 conf = json.loads(read("tools/site-config.json"))
 su = conf["signup"]
+addr = conf.get("mailing_address", "").strip()
 if su.get("live"):
-    if not conf.get("mailing_address", "").strip():
-        problems.append("signup is live but mailing_address is empty")
     if not (su.get("mailerlite_account_id") and su.get("mailerlite_form_id")):
         problems.append("signup is live but the MailerLite ids are empty")
 else:
-    notes.append("signup is NOT live (the form is left out of the site until the address and MailerLite are set)")
+    notes.append("signup is NOT live (the form is left out of the live site until MailerLite is set up)")
+
+# the mailing address is needed for the email and the footer line, not for the signup form
+tmpl = read("tools/email/sunday-email.html")
+if "MAILING ADDRESS GOES HERE" in tmpl or not addr:
+    msg = "the email template still has the placeholder address and mailing_address is empty: do NOT send an email yet"
+    if "--send" in sys.argv:
+        problems.append(msg)
+    else:
+        notes.append(msg + " (the signup form itself does not need it)")
+if not addr:
+    notes.append("the live footer shows no address line until mailing_address is set")
 
 # 4. sitemap
 sm = read("sitemap.xml")
