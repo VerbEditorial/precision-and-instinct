@@ -1,0 +1,6 @@
+# GitHub Pages build settings.
+# Keep the build tooling and project notes in the repo but out of the published site.
+# (The site itself is plain static files written by tools/build_site.py; Jekyll only copies them.)
+exclude:
+  - tools
+  - README.md
