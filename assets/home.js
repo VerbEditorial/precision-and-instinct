@@ -255,7 +255,7 @@ var PI_BASE = (typeof window.PI_BASE === 'string') ? window.PI_BASE : '/';
       document.querySelectorAll('.case-view:not([hidden]) .c-open').forEach(function (open) {
         var icon = open.querySelector('.c-icon'), title = open.querySelector('.c-title'), kick = open.querySelector('.copy .kicker');
         if (!icon || !title || !kick) return;
-        icon.style.top = ''; icon.style.maxHeight = ''; icon.style.visibility = '';
+        icon.style.top = ''; icon.style.maxHeight = ''; icon.style.zIndex = ''; icon.style.left = ''; icon.style.right = '';
         var on = document.documentElement.classList.contains('motion');
         var natural = icon.offsetHeight, defTop = icon.offsetTop;
         var limit = title.offsetTop + (on ? 60 : 0) - (on ? 30 : 0) - 26;
@@ -264,7 +264,15 @@ var PI_BASE = (typeof window.PI_BASE === 'string') ? window.PI_BASE : '/';
         var top = Math.max(topMin, limit - natural);
         icon.style.top = top + 'px';
         if (top + natural > limit) icon.style.maxHeight = Math.max(limit - top, 80) + 'px';
-        if (limit - top < 80) icon.style.visibility = 'hidden'; /* a tall headline on a short window leaves no room for the icon: leave it out rather than cover the text */
+        if (limit - top < 110) { /* a tall headline on a short window leaves no room above the date line: keep the icon, a bit smaller, tucked behind the text so the text stays readable on top */
+          icon.style.maxHeight = '140px'; icon.style.zIndex = '0';
+          var date = title.querySelector('.dateline');
+          if (date) { /* park it just to the right of the date text so it never sits across it */
+            var rg = document.createRange(); rg.selectNodeContents(date);
+            var left = Math.round(rg.getBoundingClientRect().right - open.getBoundingClientRect().left + 40);
+            if (left + icon.offsetWidth < open.offsetWidth - 20) { icon.style.left = left + 'px'; icon.style.right = 'auto'; }
+          }
+        }
       });
     }
     var t;
