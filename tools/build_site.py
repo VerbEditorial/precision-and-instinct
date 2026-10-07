@@ -556,11 +556,16 @@ PRIVACY_CSS = """
   .legal li { margin-bottom: 6px; }
   .legal a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
   .legal a:hover { color: var(--accent-hi); }
+  .legal a.back-btn { display: inline-block; background: var(--accent); color: var(--text); font-weight: 800; font-size: 14px; padding: 10px 16px; text-decoration: none; }
+  .legal a.back-btn:hover { color: var(--text); opacity: 0.9; }
+  .legal .back-top { margin: 0 0 24px; }
+  .legal .back-bottom { margin: 36px 0 0; }
   footer .disclosure a { text-decoration: underline; text-underline-offset: 2px; }
   footer .disclosure a:hover { color: var(--accent-hi); }
 """
 
 PRIVACY_BODY = """<main class="legal" id="main">
+  <p class="back-top"><a class="back-btn" href="{HOME}">&larr; Back to Precision &amp; Instinct</a></p>
   <span class="kicker">Privacy</span>
   <h1>What we collect, and why</h1>
   <p class="lede">Short version: we keep very little. Your email address if you join the Sunday email, and anonymous visit counts.</p>
@@ -586,6 +591,7 @@ PRIVACY_BODY = """<main class="legal" id="main">
 
   <h2>Contact</h2>
   <p>Questions about this page, or want your address removed? Write to <a href="mailto:evidence@precisionandinstinct.com">evidence@precisionandinstinct.com</a>.</p>
+  <p class="back-bottom"><a class="back-btn" href="{HOME}">&larr; Back to Precision &amp; Instinct</a></p>
 </main>
 """
 
@@ -626,7 +632,7 @@ def build_privacy(conf, preview):
 <body>
 
 {nav}
-{PRIVACY_BODY}
+{PRIVACY_BODY.replace('{HOME}', home)}
 <div class="wrap legal-foot">
   <footer>
     <p class="show-line">Precision &amp; Instinct with Simone Valdez and Eli Marchetti</p>{footer_lines(prefix, preview)}

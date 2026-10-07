@@ -345,5 +345,9 @@
   .legal li { margin-bottom: 6px; }
   .legal a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
   .legal a:hover { color: var(--accent-hi); }
+  .legal a.back-btn { display: inline-block; background: var(--accent); color: var(--text); font-weight: 800; font-size: 14px; padding: 10px 16px; text-decoration: none; }
+  .legal a.back-btn:hover { color: var(--text); opacity: 0.9; }
+  .legal .back-top { margin: 0 0 24px; }
+  .legal .back-bottom { margin: 36px 0 0; }
   footer .disclosure a { text-decoration: underline; text-underline-offset: 2px; }
   footer .disclosure a:hover { color: var(--accent-hi); }
