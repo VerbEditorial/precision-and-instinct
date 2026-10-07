@@ -3402,6 +3402,32 @@
     var goTop = function () { window.scrollTo(0, 0); if (window.self !== window.top) { try { document.documentElement.scrollIntoView(); } catch (e) {} } };
     goTop(); requestAnimationFrame(goTop); setTimeout(goTop, 80);
   })();
+  /* case opening: keep the floating icon clear of the date line and headline. The title starts 60px low and the icon 30px low when motion is on, so allow for that; shrink or lift the icon only when it would collide. */
+  (function () {
+    function fitIcons() {
+      document.querySelectorAll('.case-view:not([hidden]) .c-open').forEach(function (open) {
+        var icon = open.querySelector('.c-icon'), title = open.querySelector('.c-title'), kick = open.querySelector('.copy .kicker');
+        if (!icon || !title || !kick) return;
+        icon.style.top = ''; icon.style.maxHeight = ''; icon.style.visibility = '';
+        var on = document.documentElement.classList.contains('motion');
+        var natural = icon.offsetHeight, defTop = icon.offsetTop;
+        var limit = title.offsetTop + (on ? 60 : 0) - (on ? 30 : 0) - 26;
+        var topMin = kick.offsetTop + kick.offsetHeight + 14;
+        if (!natural || defTop + natural <= limit) return;
+        var top = Math.max(topMin, limit - natural);
+        icon.style.top = top + 'px';
+        if (top + natural > limit) icon.style.maxHeight = Math.max(limit - top, 80) + 'px';
+        if (limit - top < 80) icon.style.visibility = 'hidden'; /* a tall headline on a short window leaves no room for the icon: leave it out rather than cover the text */
+      });
+    }
+    var t;
+    document.querySelectorAll('.c-open .c-icon').forEach(function (im) { im.addEventListener('load', fitIcons); }); /* the icon image loads lazily: fit again once its real size is known */
+    window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(fitIcons, 150); });
+    window.addEventListener('load', fitIcons);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitIcons);
+    fitIcons();
+  })();
+
   window.addEventListener('hashchange', show);
   show();
 })();
