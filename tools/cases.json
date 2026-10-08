@@ -102,5 +102,18 @@
       "place": "Mattoon, Illinois · 1944",
       "blurb": "A small Illinois town reported a mysterious gas attacker in September 1944. Nobody was ever arrested, and one porch left physical evidence behind."
     }
+  },
+  "14": {
+    "slug": "hall-mills-murders",
+    "h1": "The Hall–Mills Murders",
+    "seo_title": "The Hall–Mills Murders Case File | Precision & Instinct",
+    "description": "Two bodies under a crab apple tree in New Jersey, 1922. A family tried and acquitted in 1926. Clips from the Precision & Instinct debate.",
+    "og_image": "/img/14-the-hall-mills-murders/opening-poster.jpg",
+    "feature": {
+      "img": "img/14-the-hall-mills-murders/opening-poster.jpg",
+      "alt": "Animated archival photograph: four men stand in an overgrown New Jersey field looking at the ground while a fifth crouches to examine it",
+      "place": "New Brunswick, New Jersey · 1922",
+      "blurb": "A minister and a choir singer were found under a crab apple tree in 1922. A family was tried and acquitted four years later, and the case is still unsolved."
+    }
   }
 }
