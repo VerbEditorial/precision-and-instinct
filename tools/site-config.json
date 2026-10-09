@@ -5,8 +5,8 @@
     "script_src": "https://plausible.io/js/pa-dbfu7oZwXJ6ainhEHEad1.js"
   },
   "signup": {
-    "live": false,
-    "mailerlite_account_id": "",
-    "mailerlite_form_id": ""
+    "live": true,
+    "mailerlite_account_id": "2691072",
+    "mailerlite_form_id": "200865567756780744"
   }
 }
