@@ -115,5 +115,18 @@
       "place": "New Brunswick, New Jersey · 1922",
       "blurb": "A minister and a choir singer were found under a crab apple tree in 1922. A family was tried and acquitted four years later, and the case is still unsolved."
     }
+  },
+  "15": {
+    "slug": "chicago-tylenol-murders",
+    "h1": "The Chicago Tylenol Murders",
+    "seo_title": "The Chicago Tylenol Murders Case File | Precision & Instinct",
+    "description": "Seven people died in 1982 after taking poisoned Tylenol, and no one has ever been charged. Clips from the Precision & Instinct debate.",
+    "og_image": "/img/15-the-chicago-tylenol-murders/evidence.jpg",
+    "feature": {
+      "img": "img/15-the-chicago-tylenol-murders/opening-poster.jpg",
+      "alt": "Animated archival-style photograph: a woman in a 1980s drugstore aisle sorts medicine boxes into a red basket in front of shelves of Tylenol and other pain relievers",
+      "place": "Chicago area, Illinois · 1982",
+      "blurb": "Seven people died in four days after taking Tylenol that someone had laced with cyanide. The recall came within weeks. No one was ever charged with the murders."
+    }
   }
 }
