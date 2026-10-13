@@ -142,5 +142,18 @@
       "blurb": "The most powerful labor leader in America left home for a lunch meeting on July 30, 1975, and was never seen again. No one has ever been charged."
     },
     "h1_word_em": 9.2
+  },
+  "17": {
+    "slug": "circleville-letters",
+    "h1": "The Circleville Letters",
+    "seo_title": "The Circleville Letters Case File | Precision & Instinct",
+    "description": "Anonymous letters terrorized Circleville, Ohio for years. A man went to prison for a booby trap, but who wrote them? Clips from the Precision & Instinct debate.",
+    "og_image": "/img/17-the-circleville-letters/evidence.jpg",
+    "feature": {
+      "img": "img/17-the-circleville-letters/opening-poster.jpg",
+      "alt": "A winter afternoon at a rural Ohio crossroads with a lone wooden post beside frozen fields",
+      "place": "Circleville, Ohio · 1977–1994",
+      "blurb": "For years anonymous letters poisoned a small Ohio town. A man went to prison for the booby trap that followed, but no one was ever charged with writing them."
+    }
   }
 }
