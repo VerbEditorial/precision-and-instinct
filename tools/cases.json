@@ -128,5 +128,18 @@
       "place": "Chicago area, Illinois · 1982",
       "blurb": "Seven people died in four days after taking Tylenol that someone had laced with cyanide. The recall came within weeks. No one was ever charged with the murders."
     }
+  },
+  "16": {
+    "slug": "jimmy-hoffa-disappearance",
+    "h1": "The Disappearance of Jimmy Hoffa",
+    "seo_title": "The Disappearance of Jimmy Hoffa Case File | Precision & Instinct",
+    "description": "Jimmy Hoffa vanished from a Detroit-area parking lot in 1975 and no one has ever been charged. Clips from the Precision & Instinct debate.",
+    "og_image": "/img/16-the-disappearance-of-jimmy-hoffa/evidence.jpg",
+    "feature": {
+      "img": "img/16-the-disappearance-of-jimmy-hoffa/opening-poster.jpg",
+      "alt": "Animated archival photograph: cars pass the Machus Red Fox steakhouse in suburban Detroit in black and white",
+      "place": "Bloomfield Township, Michigan · 1975",
+      "blurb": "The most powerful labor leader in America left home for a lunch meeting on July 30, 1975, and was never seen again. No one has ever been charged."
+    }
   }
 }
