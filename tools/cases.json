@@ -155,5 +155,18 @@
       "place": "Circleville, Ohio · 1977–1994",
       "blurb": "For years anonymous letters poisoned a small Ohio town. A man went to prison for the booby trap that followed, but no one was ever charged with writing them."
     }
+  },
+  "18": {
+    "slug": "texarkana-moonlight-murders",
+    "h1": "The Town That Dreaded Sundown",
+    "seo_title": "The Town That Dreaded Sundown: Texarkana Moonlight Murders Case File | Precision & Instinct",
+    "description": "Four attacks, five dead, one shirt with a faded collar name. Was the Texarkana Phantom one killer or two? Clips from the Precision & Instinct debate.",
+    "og_image": "/img/18-the-town-that-dreaded-sundown/evidence.jpg",
+    "feature": {
+      "img": "img/18-the-town-that-dreaded-sundown/opening-poster.jpg",
+      "alt": "Animated: a weathered farmhouse at night with glowing windows beside a snowy field under a moonlit sky",
+      "place": "Texarkana, Texas and Arkansas · 1946",
+      "blurb": "Four attacks in 1946 left five people dead around Texarkana. A tan work shirt and a witness who took her statement back sit at the center of the case against one man who was never charged."
+    }
   }
 }
