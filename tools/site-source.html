@@ -188,6 +188,7 @@
   .c-icon { position: absolute; left: 7%; top: 22%; width: auto; height: auto; max-width: clamp(150px, 20vw, 260px); max-height: clamp(150px, 32vh, 280px); transform: rotate(-7deg); filter: drop-shadow(0 22px 34px rgba(0,0,0,0.65)); z-index: 2; pointer-events: none; }
   .c-icon.right { left: auto; right: 7%; transform: rotate(8deg); }
   @media (max-width: 720px) { .c-icon { left: 16px; top: 18%; max-width: 150px; max-height: 170px; } .c-icon.right { left: auto; right: 16px; } }
+  @media (max-width: 720px) { .c-icon[src$="ep19.png"] { top: 9%; max-width: 62px; } .c-open:has(.c-icon[src$="ep19.png"]) h1 { font-size: min(8.2vw, 38px); } }
   /* two official verdicts, split on the seam */
   .verdicts-scene { padding-block: 56px; }
   .verdicts { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 6px; background: var(--black); overflow: hidden; }
@@ -3908,7 +3909,7 @@
       <div class="kicker"><a class="back" href="#cases">&larr; All case files</a><span>Case No. 019 &middot; 1953 &middot; Status: Unresolved</span></div>
       <div class="c-title">
         <p class="dateline">November 19&#8211;28, 1953 &#183; Deep Creek Lake, Maryland and New York City</p>
-        <h1>Frank Olson and MKUltra</h1>
+        <h1>The Mysterious Death of Frank Olson: CIA, LSD, and a Hotel Window</h1>
       </div>
     </div>
   </header>
