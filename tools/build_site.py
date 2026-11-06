@@ -246,6 +246,7 @@ def build_page(num, eps, hashes, blocks, cfg, urls, released_nums, preview, conf
 <div class="sound" id="sound">
   <button class="sound-btn" id="sound-btn" type="button" aria-pressed="false"><span class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="lbl">Sound off</span></button>
 </div>
+<a class="support-fab plausible-event-name=Support+the+show" href="https://ko-fi.com/precisionandinstinct" target="_blank" rel="noopener">Support the show</a>
 
 <script>window.PI_BASE = "{prefix}";</script>
 <script src="{prefix}vendor/gsap.min.js"></script>
@@ -284,6 +285,15 @@ def load_json(name, default=None):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def add_support(markup):
+    """Add the Ko-fi support line under the show line of every case/home footer (build time, so new cases get it too)."""
+    link = ('\n      <p class="small support">Enjoy the show? <a href="https://ko-fi.com/precisionandinstinct" target="_blank" rel="noopener" '
+            'class="plausible-event-name=Support+the+show">Support it on Ko-fi</a></p>')
+    if "ko-fi.com" in markup:
+        return markup
+    return re.sub(r'(<p class="show-line">.*?</p>)', lambda m: m.group(1) + link, markup)
+
+
 def decorate_links(markup, campaign, content):
     """UTM tags on every outbound listening link, plus the Plausible goal name as a class.
     Taplink = "Where to listen"; RSS.com episode links = "Hear the whole debate"."""
@@ -299,7 +309,7 @@ def decorate_links(markup, campaign, content):
         else:
             new += ' class="plausible-event-name=%s"' % goal
         return "<a" + new + ">"
-    return TAPLINK_RE.sub(sub, markup)
+    return add_support(TAPLINK_RE.sub(sub, markup))
 
 
 def signup_html(conf, preview):
@@ -481,6 +491,7 @@ def build_home(src, eps, hashes, cfg, released, conf, preview):
 <div class="sound" id="sound">
   <button class="sound-btn" id="sound-btn" type="button" aria-pressed="false"><span class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="lbl">Sound off</span></button>
 </div>
+<a class="support-fab plausible-event-name=Support+the+show" href="https://ko-fi.com/precisionandinstinct" target="_blank" rel="noopener">Support the show</a>
 
 <script>window.PI_BASE = "{prefix}";</script>
 <script src="{prefix}vendor/gsap.min.js"></script>
@@ -578,7 +589,7 @@ PRIVACY_BODY = """<main class="legal" id="main">
 
   <h2>Anonymous visit counts</h2>
   <p>We count visits with Plausible Analytics, a privacy-focused service. It does not use cookies and does not collect personal data about visitors. We see things like which pages are read, which country visits come from, and which site sent a visitor.</p>
-  <p>We also count clicks on the "Where to listen" and "Hear the whole debate" links, so we know whether the site is sending people to the episodes. These are counts, not records of who clicked.</p>
+  <p>We also count clicks on the "Where to listen", "Hear the whole debate" and "Support the show" links, so we know whether the site is sending people to the episodes and to the support page. These are counts, not records of who clicked.</p>
 
   <h2>Unsubscribing</h2>
   <p>Every email we send has an unsubscribe link at the bottom. Click it and you are off the list. If you would rather have your address deleted, write to us at the address below and we will remove it.</p>
@@ -586,7 +597,7 @@ PRIVACY_BODY = """<main class="legal" id="main">
   <h2>Other services you may meet</h2>
   <ul>
     <li>The site is hosted on GitHub Pages. Like any web host, it receives your IP address when your browser loads a page.</li>
-    <li>The episode player on each case page comes from RSS.com, and the "Where to listen" page is on Taplink. When you use them you are on their sites, under their own privacy policies.</li>
+    <li>The episode player on each case page comes from RSS.com, the "Where to listen" page is on Taplink, and the support page is on Ko-fi. When you use them you are on their sites, under their own privacy policies.</li>
   </ul>
 
   <h2>Contact</h2>
